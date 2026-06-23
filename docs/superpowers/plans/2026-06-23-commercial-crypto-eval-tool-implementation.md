@@ -319,11 +319,11 @@ Expected:
 - Test: `tests/unit/test_scoring_rules.py`
 - Test: `tests/unit/test_association_rules.py`
 
-- [ ] **Step 1: 定义枚举**
+- [x] **Step 1: 定义枚举**
 
 `enums.py` must include stable string enums for `SecurityLayer`、`MeasureUnit`、`RiskLevel`、`RiskMode`、`QuantValue`、`ComplianceStatus`、`ProductLevel`、`ImportMode`、`KnowledgeType`、`KnowledgeModule`。Use Chinese display strings from `开发需求文档.md`.
 
-- [ ] **Step 2: 写量化规则测试**
+- [x] **Step 2: 写量化规则测试**
 
 Create tests that lock the documented behavior:
 
@@ -349,7 +349,7 @@ def test_object_score_uses_ra_when_a_fails_k_passes():
     assert calculate_object_score(d="√", a="×", k="√", ra=0.5, rk=1.0) == 0.25
 ```
 
-- [ ] **Step 3: 实现量化规则**
+- [x] **Step 3: 实现量化规则**
 
 Implement pure functions:
 
@@ -360,7 +360,7 @@ Implement pure functions:
 
 Rules must match FR-032, SCORE-005, SCORE-016, SCORE-017.
 
-- [ ] **Step 4: 写评分规则测试**
+- [x] **Step 4: 写评分规则测试**
 
 Create tests for 41 indicators, fixed non-applicable indicators, and total score:
 
@@ -386,7 +386,7 @@ def test_layer_score_ignores_not_applicable_items():
     assert score == 2.0 / 3.0
 ```
 
-- [ ] **Step 5: 实现评分规则**
+- [x] **Step 5: 实现评分规则**
 
 Implement:
 
@@ -396,7 +396,7 @@ Implement:
 - `calculate_total_score(technical_score, management_score)`
 - `classify_compliance(unit_score)`
 
-- [ ] **Step 6: 写关联矩阵测试**
+- [x] **Step 6: 写关联矩阵测试**
 
 Cover all PARENT matrices:
 
@@ -416,12 +416,12 @@ def test_network_boundary_has_no_current_product_write_entry():
     assert rule.product_write_reference is None
 ```
 
-- [ ] **Step 7: 实现关联矩阵和问题清单模板常量**
+- [x] **Step 7: 实现关联矩阵和问题清单模板常量**
 
 `association_rules.py` must encode PARENT-001 through PARENT-008.  
 `issue_templates.py` must encode EXP-016 and EXP-017 templates with named placeholders.
 
-- [ ] **Step 8: 运行验证**
+- [x] **Step 8: 运行验证**
 
 Run:
 
@@ -435,7 +435,7 @@ Expected:
 all tests passed
 ```
 
-- [ ] **Step 9: 提交**
+- [x] **Step 9: 提交**
 
 ```powershell
 git add mpxccp/domain tests/unit/test_quant_rules.py tests/unit/test_scoring_rules.py tests/unit/test_association_rules.py

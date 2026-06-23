@@ -4,7 +4,7 @@
 
 ## 当前状态
 
-当前仓库已完成需求、设计、实施计划和 Task 1 工程初始化。Task 1 建立了 Python 包入口、`pyproject.toml`、pytest 基础配置和启动桩，并通过最小自动化验证。
+当前仓库已完成需求、设计、实施计划、Task 1 工程初始化和 Task 2 领域规则。Task 2 建立了领域枚举、量化评估规则、评分规则、业务关联矩阵和问题清单模板辅助函数，并通过领域层自动化验证。
 
 - `开发需求文档.md`：最高优先级需求基线，记录功能、数据结构、交互行为、评分公式、Excel 协议、证据文件协议、保存协议和兼容边界。
 - `开发设计方案.md`：开发设计方案，明确推荐技术栈、总体架构、数据模型、模块边界、测试与验收方案。
@@ -16,7 +16,9 @@
 
 - 包入口：`mpxccp/main.py`
 - 启动桩：`mpxccp/bootstrap.py`
+- 领域规则：`mpxccp/domain/`
 - 基础测试：`tests/unit/test_bootstrap.py`
+- 领域测试：`tests/unit/test_quant_rules.py`、`tests/unit/test_scoring_rules.py`、`tests/unit/test_association_rules.py`
 - 工程配置：`pyproject.toml`
 
 ## 推荐技术栈
@@ -73,7 +75,8 @@ docs/superpowers/plans/2026-06-23-commercial-crypto-eval-tool-implementation.md
 建议顺序：
 
 1. 工程初始化与开发工具链。已完成。
-2. 领域规则和数据库基础。下一步。
+2. 领域规则。已完成。
+3. 数据库基础。下一步。
 3. 项目生命周期、共享服务、UI 壳和通用控件。
 4. 四类技术域模块并行实现。
 5. 评分、Excel、问题清单和知识库。
@@ -85,6 +88,7 @@ docs/superpowers/plans/2026-06-23-commercial-crypto-eval-tool-implementation.md
 
 ```powershell
 python -m pytest tests/unit/test_bootstrap.py -q
+python -m pytest tests/unit/test_quant_rules.py tests/unit/test_scoring_rules.py tests/unit/test_association_rules.py -q
 ```
 
 完整工程逐步实现后，最终回归应至少包含：

@@ -1,0 +1,12 @@
+from __future__ import annotations
+
+CHECK = "√"
+CROSS = "×"
+SLASH = "/"
+EMPTY = ""
+
+TECHNICAL_FULL_SCORE = 70.0
+MANAGEMENT_FULL_SCORE = 30.0
+TOTAL_FULL_SCORE = 100.0
+
+FIXED_NOT_APPLICABLE_INDICATOR_NOS = {8, 12, 17}
