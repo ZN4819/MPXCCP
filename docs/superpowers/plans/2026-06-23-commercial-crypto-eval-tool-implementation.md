@@ -164,7 +164,7 @@ F:\Codex\MPXCCP\
 - Create: `tests/conftest.py`
 - Create: `.gitignore`
 
-- [ ] **Step 1: 初始化 Git 仓库**
+- [x] **Step 1: 初始化 Git 仓库**
 
 Run:
 
@@ -190,7 +190,7 @@ Expected:
 Initialized empty Git repository
 ```
 
-- [ ] **Step 2: 创建 Python 包骨架**
+- [x] **Step 2: 创建 Python 包骨架**
 
 Create the package directories listed in Target File Structure. Ensure `mpxccp/main.py` exposes an importable CLI entry:
 
@@ -208,7 +208,7 @@ if __name__ == "__main__":
     raise SystemExit(main())
 ```
 
-- [ ] **Step 3: 写入 `pyproject.toml`**
+- [x] **Step 3: 写入 `pyproject.toml`**
 
 Use this baseline:
 
@@ -249,7 +249,7 @@ target-version = "py311"
 select = ["E", "F", "I", "UP", "B"]
 ```
 
-- [ ] **Step 4: 写入启动桩**
+- [x] **Step 4: 写入启动桩**
 
 `mpxccp/bootstrap.py` starts without creating the full UI yet:
 
@@ -261,7 +261,7 @@ def run_app() -> int:
     return 0
 ```
 
-- [ ] **Step 5: 写入基础测试**
+- [x] **Step 5: 写入基础测试**
 
 Create `tests/unit/test_bootstrap.py`:
 
@@ -273,7 +273,7 @@ def test_run_app_returns_zero_for_bootstrap_stub():
     assert run_app() == 0
 ```
 
-- [ ] **Step 6: 运行验证**
+- [x] **Step 6: 运行验证**
 
 Run:
 
@@ -287,7 +287,7 @@ Expected:
 1 passed
 ```
 
-- [ ] **Step 7: 提交**
+- [x] **Step 7: 提交**
 
 Run:
 
@@ -1983,4 +1983,3 @@ resource check passed
 | 问题清单、知识库导入导出 | Task 15 |
 | 数据迁移、项目范围解析、关联完整性检查 | Task 16 |
 | 安装运行和自动化验收 | Task 17, Task 18 |
-
