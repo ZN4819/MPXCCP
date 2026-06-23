@@ -4,12 +4,20 @@
 
 ## 当前状态
 
-当前仓库处于需求、设计和实施计划阶段，已完成以下项目级文档：
+当前仓库已完成需求、设计、实施计划和 Task 1 工程初始化。Task 1 建立了 Python 包入口、`pyproject.toml`、pytest 基础配置和启动桩，并通过最小自动化验证。
 
 - `开发需求文档.md`：最高优先级需求基线，记录功能、数据结构、交互行为、评分公式、Excel 协议、证据文件协议、保存协议和兼容边界。
 - `开发设计方案.md`：开发设计方案，明确推荐技术栈、总体架构、数据模型、模块边界、测试与验收方案。
 - `docs/superpowers/plans/2026-06-23-commercial-crypto-eval-tool-implementation.md`：详细开发实施计划，按任务和并行 Wave 拆分工程落地步骤。
 - `AGENTS.md`：面向后续开发代理的仓库级工作规则，包含文档优先级、关键业务不变量、UI 设计约束、测试要求和完成标准。
+- `docs/阶段记录.md`：按阶段记录实施内容、验证结果、文档同步和远程分支。
+
+## 当前工程入口
+
+- 包入口：`mpxccp/main.py`
+- 启动桩：`mpxccp/bootstrap.py`
+- 基础测试：`tests/unit/test_bootstrap.py`
+- 工程配置：`pyproject.toml`
 
 ## 推荐技术栈
 
@@ -64,8 +72,8 @@ docs/superpowers/plans/2026-06-23-commercial-crypto-eval-tool-implementation.md
 
 建议顺序：
 
-1. 工程初始化与开发工具链。
-2. 领域规则和数据库基础。
+1. 工程初始化与开发工具链。已完成。
+2. 领域规则和数据库基础。下一步。
 3. 项目生命周期、共享服务、UI 壳和通用控件。
 4. 四类技术域模块并行实现。
 5. 评分、Excel、问题清单和知识库。
@@ -73,7 +81,13 @@ docs/superpowers/plans/2026-06-23-commercial-crypto-eval-tool-implementation.md
 
 ## 未来验证命令
 
-工程代码初始化完成后，最终回归应至少包含：
+当前已可运行的最小验证：
+
+```powershell
+python -m pytest tests/unit/test_bootstrap.py -q
+```
+
+完整工程逐步实现后，最终回归应至少包含：
 
 ```powershell
 python -m pytest -q
@@ -82,4 +96,3 @@ powershell -ExecutionPolicy Bypass -File scripts/check_resources.ps1
 ```
 
 当前仓库尚未进入代码实现阶段，上述命令会在后续 Task 逐步具备运行条件。
-
