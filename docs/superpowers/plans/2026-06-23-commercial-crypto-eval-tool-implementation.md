@@ -466,7 +466,7 @@ git commit -m "feat: add domain rules for quant scoring and associations"
 - Create: `mpxccp/services/migration_service.py`
 - Test: `tests/integration/test_database_schema.py`
 
-- [ ] **Step 1: 定义本地路径规则**
+- [x] **Step 1: 定义本地路径规则**
 
 `paths.py` must resolve:
 
@@ -475,7 +475,7 @@ git commit -m "feat: add domain rules for quant scoring and associations"
 - Evidence root read from settings table, not hardcoded.
 - Resource path that works in source mode and PyInstaller mode.
 
-- [ ] **Step 2: 写 schema 测试**
+- [x] **Step 2: 写 schema 测试**
 
 Create:
 
@@ -498,7 +498,7 @@ def test_database_schema_creates_core_tables(tmp_path):
     assert "scoring_indicators" in names
 ```
 
-- [ ] **Step 3: 实现 ORM 模型**
+- [x] **Step 3: 实现 ORM 模型**
 
 Tables must cover:
 
@@ -512,7 +512,7 @@ Tables must cover:
 
 Use integer primary keys, `project_id` foreign keys, `sort_order`, `created_at`, `updated_at`, and indexes on `(project_id, unit_type, related_id)` for shared records.
 
-- [ ] **Step 4: 实现会话和初始化**
+- [x] **Step 4: 实现会话和初始化**
 
 `session.py` must expose:
 
@@ -523,7 +523,7 @@ Use integer primary keys, `project_id` foreign keys, `sort_order`, `created_at`,
 
 `session_scope` commits on success, rolls back on exception, and closes always.
 
-- [ ] **Step 5: 实现迁移服务**
+- [x] **Step 5: 实现迁移服务**
 
 `migration_service.py` must:
 
@@ -532,7 +532,7 @@ Use integer primary keys, `project_id` foreign keys, `sort_order`, `created_at`,
 - Run enum cleanup idempotently.
 - Record executed migration name/version in `data_versions`.
 
-- [ ] **Step 6: 运行验证**
+- [x] **Step 6: 运行验证**
 
 ```powershell
 python -m pytest tests/integration/test_database_schema.py -q
@@ -544,7 +544,7 @@ Expected:
 1 passed
 ```
 
-- [ ] **Step 7: 提交**
+- [x] **Step 7: 提交**
 
 ```powershell
 git add mpxccp/config mpxccp/models mpxccp/repositories mpxccp/services/migration_service.py tests/integration/test_database_schema.py
