@@ -896,7 +896,7 @@ git commit -m "feat: add desktop shell and startup resources"
 - Test: `tests/ui/test_autosave_manager.py`
 - Test: `tests/ui/test_date_input.py`
 
-- [ ] **Step 1: 写量化控件测试**
+- [x] **Step 1: 写量化控件测试**
 
 ```python
 def test_quant_widget_disables_a_k_when_d_is_cross(qtbot):
@@ -910,7 +910,7 @@ def test_quant_widget_disables_a_k_when_d_is_cross(qtbot):
     assert widget.k_enabled() is False
 ```
 
-- [ ] **Step 2: 实现 QuantWidget**
+- [x] **Step 2: 实现 QuantWidget**
 
 Widget must expose:
 
@@ -921,7 +921,7 @@ Widget must expose:
 - `k_enabled()`
 - signal `values_changed`
 
-- [ ] **Step 3: 写自动保存测试**
+- [x] **Step 3: 写自动保存测试**
 
 ```python
 def test_autosave_manager_debounces_changes(qtbot):
@@ -937,11 +937,11 @@ def test_autosave_manager_debounces_changes(qtbot):
     assert called == [True]
 ```
 
-- [ ] **Step 4: 实现 AutoSaveManager**
+- [x] **Step 4: 实现 AutoSaveManager**
 
 Must recursively scan input widgets, skip invalid objects, use single-shot timer, and expose `save_now()`.
 
-- [ ] **Step 5: 实现 DateInput**
+- [x] **Step 5: 实现 DateInput**
 
 Must support:
 
@@ -951,7 +951,7 @@ Must support:
 - Min/max date.
 - Readable colors through QSS.
 
-- [ ] **Step 6: 实现 RiskWidget、ProductListWidget、EvidenceDialog、ImageUploadWidget、KnowledgePicker**
+- [x] **Step 6: 实现 RiskWidget、ProductListWidget、EvidenceDialog、ImageUploadWidget、KnowledgePicker**
 
 Each widget must be thin:
 
@@ -959,7 +959,7 @@ Each widget must be thin:
 - It exposes signals.
 - It delegates persistence to services injected by parent pages.
 
-- [ ] **Step 7: 运行验证**
+- [x] **Step 7: 运行验证**
 
 ```powershell
 python -m pytest tests/ui/test_quant_widget.py tests/ui/test_autosave_manager.py tests/ui/test_date_input.py -q
@@ -971,7 +971,7 @@ Expected:
 all tests passed
 ```
 
-- [ ] **Step 8: 提交**
+- [x] **Step 8: 提交**
 
 ```powershell
 git add mpxccp/ui/widgets tests/ui/test_quant_widget.py tests/ui/test_autosave_manager.py tests/ui/test_date_input.py
