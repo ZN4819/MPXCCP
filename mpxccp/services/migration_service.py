@@ -3,7 +3,7 @@ from __future__ import annotations
 import logging
 from collections.abc import Callable
 
-from sqlalchemy import Engine, or_, select, update
+from sqlalchemy import Engine, inspect, or_, select, text, update
 from sqlalchemy.orm import Session
 
 from mpxccp.config.settings import DEFAULT_APP_SETTINGS
@@ -114,6 +114,12 @@ class MigrationService:
                 "1",
                 "Clean nullable enum-like values without changing business data.",
                 self._run_enum_cleanup,
+            ),
+            (
+                "physical_detail_extra_data",
+                "1",
+                "Ensure physical detail tables can store requirement-specific extension fields.",
+                self._ensure_physical_detail_extra_data_columns,
             ),
         )
         for name, version, description, migration in migrations:
@@ -242,3 +248,15 @@ class MigrationService:
                     )
                     .values({column_name: ""})
                 )
+
+    def _ensure_physical_detail_extra_data_columns(self, session: Session) -> None:
+        inspector = inspect(session.bind)
+        for table_name in (
+            "physical_auth_details",
+            "physical_access_integrity_details",
+            "physical_video_integrity_details",
+        ):
+            columns = {column["name"] for column in inspector.get_columns(table_name)}
+            if "extra_data" in columns:
+                continue
+            session.execute(text(f"alter table {table_name} add column extra_data JSON"))

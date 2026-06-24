@@ -147,6 +147,22 @@ class QuantService:
                 if record.unit_type in EFFECTIVE_D_UNITS and record.d_value == CHECK
             )
 
+    def exists_for_related(
+        self,
+        related_id: int,
+        *,
+        unit_type: str | None = None,
+        project_id: int | None = None,
+    ) -> bool:
+        resolved_project_id = self._resolve_project_id(project_id)
+        with readonly_session_scope(self.engine) as session:
+            return self.shared_repo.quant_exists_for_related(
+                session,
+                related_id,
+                project_id=resolved_project_id,
+                unit_type=unit_type,
+            )
+
     def _resolve_project_id(self, project_id: int | None) -> int:
         resolved = project_id if project_id is not None else self.project_id
         if resolved is None:

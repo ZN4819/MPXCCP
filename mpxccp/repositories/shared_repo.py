@@ -54,6 +54,38 @@ class SharedRepository:
         session.flush()
         return record
 
+    def quant_exists_for_related(
+        self,
+        session: Session,
+        related_id: int,
+        *,
+        project_id: int | None = None,
+        unit_type: str | None = None,
+    ) -> bool:
+        query = select(QuantitativeAssessment.id).where(
+            QuantitativeAssessment.related_id == related_id
+        )
+        if project_id is not None:
+            query = query.where(QuantitativeAssessment.project_id == project_id)
+        if unit_type is not None:
+            query = query.where(QuantitativeAssessment.unit_type == unit_type)
+        return session.scalar(query.limit(1)) is not None
+
+    def delete_quant_for_related(
+        self,
+        session: Session,
+        project_id: int,
+        unit_type: str,
+        related_id: int,
+    ) -> None:
+        session.execute(
+            delete(QuantitativeAssessment).where(
+                QuantitativeAssessment.project_id == project_id,
+                QuantitativeAssessment.unit_type == unit_type,
+                QuantitativeAssessment.related_id == related_id,
+            )
+        )
+
     def load_products(
         self,
         session: Session,
@@ -240,3 +272,18 @@ class SharedRepository:
         session.add(record)
         session.flush()
         return record
+
+    def delete_evidence_for_related(
+        self,
+        session: Session,
+        project_id: int,
+        unit_type: str,
+        related_id: int,
+    ) -> None:
+        session.execute(
+            delete(EvidenceImage).where(
+                EvidenceImage.project_id == project_id,
+                EvidenceImage.unit_type == unit_type,
+                EvidenceImage.related_id == related_id,
+            )
+        )
