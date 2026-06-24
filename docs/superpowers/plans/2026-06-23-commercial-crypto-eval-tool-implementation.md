@@ -1510,7 +1510,7 @@ git commit -m "feat: implement interview workbook import"
 - Test: `tests/integration/test_excel_export.py`
 - Test: `tests/integration/test_score_workbook.py`
 
-- [ ] **Step 1: 写全部数据导出结构测试**
+- [x] **Step 1: 写全部数据导出结构测试**
 
 ```python
 def test_export_all_data_has_expected_sheets(app_services, sample_project):
@@ -1524,7 +1524,7 @@ def test_export_all_data_has_expected_sheets(app_services, sample_project):
     ]
 ```
 
-- [ ] **Step 2: 实现 WorkbookStyles**
+- [x] **Step 2: 实现 WorkbookStyles**
 
 Centralize:
 
@@ -1535,7 +1535,7 @@ Centralize:
 - Microsoft YaHei font.
 - Column widths from EXP protocols.
 
-- [ ] **Step 3: 实现 ExportWriter**
+- [x] **Step 3: 实现 ExportWriter**
 
 Methods:
 
@@ -1547,7 +1547,7 @@ Methods:
 
 Must implement EXP-001 through EXP-007.
 
-- [ ] **Step 4: 写打分表测试**
+- [x] **Step 4: 写打分表测试**
 
 ```python
 def test_score_workbook_has_nine_sheets(app_services, sample_project):
@@ -1565,7 +1565,7 @@ def test_score_workbook_has_nine_sheets(app_services, sample_project):
     ]
 ```
 
-- [ ] **Step 5: 实现 ScoreWorkbook**
+- [x] **Step 5: 实现 ScoreWorkbook**
 
 Must implement EXP-008 through EXP-012:
 
@@ -1575,7 +1575,7 @@ Must implement EXP-008 through EXP-012:
 - Four management domain sheets.
 - Import management score row 3, column C onward.
 
-- [ ] **Step 6: 实现 ExportService**
+- [x] **Step 6: 实现 ExportService**
 
 Methods:
 
@@ -1584,7 +1584,7 @@ Methods:
 - `export_score_workbook(project_id)`
 - `import_score_workbook(project_id, source, mode)`
 
-- [ ] **Step 7: 运行验证**
+- [x] **Step 7: 运行验证**
 
 ```powershell
 python -m pytest tests/integration/test_excel_export.py tests/integration/test_score_workbook.py -q
@@ -1596,7 +1596,7 @@ Expected:
 all tests passed
 ```
 
-- [ ] **Step 8: 提交**
+- [x] **Step 8: 提交**
 
 ```powershell
 git add mpxccp/integration/excel/workbook_styles.py mpxccp/integration/excel/export_writer.py mpxccp/integration/excel/score_workbook.py mpxccp/services/export_service.py tests/integration/test_excel_export.py tests/integration/test_score_workbook.py

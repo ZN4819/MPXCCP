@@ -30,7 +30,8 @@ from mpxccp.integration.excel.schema import (
     IMPORTANT_DATA_TRANSPORT_INTEGRITY_COLUMNS,
     NETWORK_AUTH_COLUMNS,
     NETWORK_BOUNDARY_COLUMNS,
-    NETWORK_COMMON_UNIT_COLUMNS,
+    NETWORK_CONFIDENTIALITY_COLUMNS,
+    NETWORK_INTEGRITY_COLUMNS,
     NETWORK_OBJECT_COLUMNS,
     PHYSICAL_AUTH_COLUMNS,
     PHYSICAL_INTEGRITY_COLUMNS,
@@ -241,6 +242,15 @@ class ImportService:
         crypto_row = self._find_row(sheet, "三、密码应用情况")
         if crypto_row is None:
             return
+        review_org_or_date = self.reader.cell(sheet, crypto_row + 9, 2)
+        review_date_candidate = self.reader.cell(sheet, crypto_row + 10, 2)
+        if review_date_candidate:
+            review_org = review_org_or_date
+            review_date = review_date_candidate
+        else:
+            parsed_review_org_or_date = self.reader.parse_date(review_org_or_date)
+            review_org = "" if parsed_review_org_or_date is not None else review_org_or_date
+            review_date = review_org_or_date if parsed_review_org_or_date is not None else ""
         crypto_values = {
             "last_assessment_status": self.reader.cell(sheet, crypto_row + 1, 2),
             "last_assessment_org": self.reader.cell(sheet, crypto_row + 2, 2),
@@ -250,7 +260,8 @@ class ImportService:
             "has_scheme": self.reader.cell(sheet, crypto_row + 6, 2),
             "is_reviewed": self.reader.cell(sheet, crypto_row + 7, 2),
             "review_method": self.reader.cell(sheet, crypto_row + 8, 2),
-            "review_date": self._date_text(self.reader.cell(sheet, crypto_row + 9, 2)),
+            "review_org": review_org,
+            "review_date": self._date_text(review_date),
         }
         self.basic_repo.upsert_crypto_application_info(session, project_id, crypto_values)
 
@@ -483,11 +494,12 @@ class ImportService:
                 auth_values.get("products"),
             )
             start_column = auth_start + len(NETWORK_AUTH_COLUMNS)
-            for unit_key in ("integrity", "confidentiality"):
+            for unit_key, columns in (
+                ("integrity", NETWORK_INTEGRITY_COLUMNS),
+                ("confidentiality", NETWORK_CONFIDENTIALITY_COLUMNS),
+            ):
                 detail = details[unit_key]
-                values = self._row_segment(
-                    sheet, row_index, start_column, NETWORK_COMMON_UNIT_COLUMNS
-                )
+                values = self._row_segment(sheet, row_index, start_column, columns)
                 if detail is not None:
                     self._apply_detail(
                         detail,
@@ -504,7 +516,7 @@ class ImportService:
                         ImportCellContext("网络", SHEET_NAMES.network, row_index),
                         d_column=self._quant_d_column(
                             start_column,
-                            NETWORK_COMMON_UNIT_COLUMNS,
+                            columns,
                         ),
                     )
                     self._save_products_from_text(
@@ -514,7 +526,7 @@ class ImportService:
                         channel.id,
                         values.get("products"),
                     )
-                start_column += len(NETWORK_COMMON_UNIT_COLUMNS)
+                start_column += len(columns)
             boundary = details["boundary"]
             boundary_values = self._row_segment(
                 sheet,
@@ -1239,7 +1251,13 @@ class ImportService:
             if isinstance(value, str) and value.startswith("【"):
                 end_row = row_index
                 break
-        return range(start_row + 3, end_row)
+        data_start = start_row + 2
+        if data_start < end_row and not any(
+            self.reader.cell(sheet, data_start, column)
+            for column in range(1, sheet.max_column + 1)
+        ):
+            data_start += 1
+        return range(data_start, end_row)
 
     def _next_section_row(self, start_row: int, section_rows: dict[str, int]) -> int | None:
         later = [row for row in section_rows.values() if row > start_row]

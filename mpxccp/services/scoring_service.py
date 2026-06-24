@@ -5,6 +5,7 @@ from typing import Any
 
 from sqlalchemy import Engine
 
+import mpxccp.models as models
 from mpxccp.domain.constants import MANAGEMENT_FULL_SCORE, TECHNICAL_FULL_SCORE
 from mpxccp.domain.enums import SecurityLayer
 from mpxccp.domain.quant_rules import calculate_object_score
@@ -200,64 +201,71 @@ class ScoringService:
 
     def calculate_and_persist_summary(self, project_id: int) -> ScoreSummaryRecord:
         with session_scope(self.engine) as session:
-            self.scoring_repo.ensure_indicators(session)
-            indicators = self.scoring_repo.list_indicators(session)
-            management = {
-                item.indicator_no: item
-                for item in self.scoring_repo.list_management_scores(session, project_id)
-            }
-            details = [
-                self._calculate_indicator_detail(session, project_id, indicator, management)
-                for indicator in indicators
-            ]
-            technical_score = self._category_score(details, TECHNICAL_LAYERS)
-            management_score = self._category_score(details, MANAGEMENT_LAYERS)
-            layer_scores = self._allocate_scores(details)
-            counts = self._compliance_counts(details)
-            total_score = calculate_total_score(technical_score, management_score)
-            self.scoring_repo.replace_summary(
-                session,
-                project_id=project_id,
-                summary_values={
-                    "technical_score": technical_score,
-                    "management_score": management_score,
-                    "total_score": total_score,
-                    "total_allocated_score": 100.0,
-                    "total_earned_score": total_score,
-                    "total_lost_score": round(100.0 - total_score, 2),
-                    "compliant_count": counts["符合"],
-                    "partial_count": counts["部分符合"],
-                    "non_compliant_count": counts["不符合"],
-                    "not_applicable_count": counts["不适用"],
-                    "layer_scores": {
-                        item.name: {
-                            "score": item.score,
-                            "actual_weight": item.actual_weight,
-                            "allocated_score": item.allocated_score,
-                            "earned_score": item.earned_score,
-                            "lost_score": item.lost_score,
-                        }
-                        for item in layer_scores
-                    },
+            return self.calculate_and_persist_summary_in_session(session, project_id)
+
+    def calculate_and_persist_summary_in_session(
+        self,
+        session,
+        project_id: int,
+    ) -> ScoreSummaryRecord:
+        self.scoring_repo.ensure_indicators(session)
+        indicators = self.scoring_repo.list_indicators(session)
+        management = {
+            item.indicator_no: item
+            for item in self.scoring_repo.list_management_scores(session, project_id)
+        }
+        details = [
+            self._calculate_indicator_detail(session, project_id, indicator, management)
+            for indicator in indicators
+        ]
+        technical_score = self._category_score(details, TECHNICAL_LAYERS)
+        management_score = self._category_score(details, MANAGEMENT_LAYERS)
+        layer_scores = self._allocate_scores(details)
+        counts = self._compliance_counts(details)
+        total_score = calculate_total_score(technical_score, management_score)
+        self.scoring_repo.replace_summary(
+            session,
+            project_id=project_id,
+            summary_values={
+                "technical_score": technical_score,
+                "management_score": management_score,
+                "total_score": total_score,
+                "total_allocated_score": 100.0,
+                "total_earned_score": total_score,
+                "total_lost_score": round(100.0 - total_score, 2),
+                "compliant_count": counts["符合"],
+                "partial_count": counts["部分符合"],
+                "non_compliant_count": counts["不符合"],
+                "not_applicable_count": counts["不适用"],
+                "layer_scores": {
+                    item.name: {
+                        "score": item.score,
+                        "actual_weight": item.actual_weight,
+                        "allocated_score": item.allocated_score,
+                        "earned_score": item.earned_score,
+                        "lost_score": item.lost_score,
+                    }
+                    for item in layer_scores
                 },
-                detail_values=[self._detail_values(detail) for detail in details],
-            )
-            return ScoreSummaryRecord(
-                project_id=project_id,
-                technical_score=technical_score,
-                management_score=management_score,
-                total_score=total_score,
-                total_allocated_score=100.0,
-                total_earned_score=total_score,
-                total_lost_score=round(100.0 - total_score, 2),
-                compliant_count=counts["符合"],
-                partial_count=counts["部分符合"],
-                non_compliant_count=counts["不符合"],
-                not_applicable_count=counts["不适用"],
-                dirty=False,
-                layer_scores=layer_scores,
-                details=details,
-            )
+            },
+            detail_values=[self._detail_values(detail) for detail in details],
+        )
+        return ScoreSummaryRecord(
+            project_id=project_id,
+            technical_score=technical_score,
+            management_score=management_score,
+            total_score=total_score,
+            total_allocated_score=100.0,
+            total_earned_score=total_score,
+            total_lost_score=round(100.0 - total_score, 2),
+            compliant_count=counts["符合"],
+            partial_count=counts["部分符合"],
+            non_compliant_count=counts["不符合"],
+            not_applicable_count=counts["不适用"],
+            dirty=False,
+            layer_scores=layer_scores,
+            details=details,
+        )
 
     def load_summary(self, project_id: int) -> ScoreSummaryRecord | None:
         with readonly_session_scope(self.engine) as session:
@@ -323,7 +331,7 @@ class ScoringService:
                     ScoreObjectRecord(
                         unit_type=unit_type,
                         related_id=detail.id,
-                        object_name=f"详情 {detail.id}",
+                        object_name=self._object_name(session, unit_type, detail),
                         d=quant.d_value or "",
                         a=quant.a_value or "",
                         k=quant.k_value or "",
@@ -390,6 +398,36 @@ class ScoringService:
             ra=quant.ra_value,
             rk=quant.rk_value,
         )
+
+    def _object_name(self, session, unit_type: str, detail: Any) -> str:
+        object_ref = {
+            "物理访问身份鉴别": (models.PhysicalObject, "physical_object_id"),
+            "门禁记录完整性": (models.PhysicalObject, "physical_object_id"),
+            "视频记录完整性": (models.PhysicalObject, "physical_object_id"),
+            "设备登录身份鉴别": (models.DeviceObject, "device_object_id"),
+            "远程管理通道": (models.DeviceObject, "device_object_id"),
+            "设备访问控制完整性": (models.DeviceObject, "device_object_id"),
+            "设备日志完整性": (models.DeviceObject, "device_object_id"),
+            "可执行程序完整性": (models.DeviceObject, "device_object_id"),
+            "通信实体身份鉴别": (models.NetworkChannel, "network_channel_id"),
+            "通信过程数据完整性": (models.NetworkChannel, "network_channel_id"),
+            "通信过程数据机密性": (models.NetworkChannel, "network_channel_id"),
+            "网络边界访问控制完整性": (models.NetworkChannel, "network_channel_id"),
+            "应用用户身份鉴别": (models.ApplicationUser, "application_user_id"),
+            "应用访问控制完整性": (models.AccessControlObject, "access_control_object_id"),
+            "重要数据传输机密性": (models.ImportantData, "important_data_id"),
+            "重要数据存储机密性": (models.ImportantData, "important_data_id"),
+            "重要数据传输完整性": (models.ImportantData, "important_data_id"),
+            "重要数据存储完整性": (models.ImportantData, "important_data_id"),
+            "关键业务行为不可否认性": (models.BusinessAction, "business_action_id"),
+        }.get(unit_type)
+        if object_ref is None:
+            return f"详情 {detail.id}"
+        model, field_name = object_ref
+        parent_id = getattr(detail, field_name, None)
+        parent = session.get(model, parent_id) if parent_id is not None else None
+        name = getattr(parent, "name", "") if parent is not None else ""
+        return str(name or f"详情 {detail.id}")
 
     def _category_score(
         self,
