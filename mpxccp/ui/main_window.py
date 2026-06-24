@@ -27,6 +27,9 @@ from PySide6.QtWidgets import (
     QWidget,
 )
 
+from mpxccp.services.physical_service import PhysicalService
+from mpxccp.ui.pages import PhysicalPage
+
 MAIN_WINDOW_TITLE = "商用密码应用安全性评估实施工具"
 
 TAB_NAMES = [
@@ -121,8 +124,9 @@ ACTION_ICONS["删除"] = _TRASH_ICON
 class MainWindow(QMainWindow):
     """Desktop shell for the commercial cryptography assessment workflow."""
 
-    def __init__(self) -> None:
+    def __init__(self, *, physical_service: PhysicalService | None = None) -> None:
         super().__init__()
+        self._physical_service = physical_service
         self.current_project_id: int | None = None
         self.current_project_name = "未打开"
         self.current_flow_no = "--"
@@ -172,7 +176,11 @@ class MainWindow(QMainWindow):
         self.current_project_id = project_id
         self.current_project_name = system_name.strip() or "未命名项目"
         self.current_flow_no = flow_no.strip() or "--"
+        self._physical_page.set_project_id(project_id)
         self._refresh_status_bar()
+
+    def physical_page(self) -> PhysicalPage:
+        return self._physical_page
 
     def set_effective_d_count(self, count: int | None) -> None:
         self.effective_d_count = max(count or 0, 0)
@@ -234,14 +242,8 @@ class MainWindow(QMainWindow):
         self._tabs.setObjectName("workspaceTabs")
         self._tabs.setDocumentMode(True)
         self._tabs.addTab(self._build_basic_info_page(), TAB_NAMES[0])
-        self._tabs.addTab(
-            self._build_domain_page(
-                title="物理和环境安全",
-                objects=["机房环境", "门禁与视频", "配电与消防"],
-                detail_labels=["测评对象", "保护措施", "风险说明"],
-            ),
-            TAB_NAMES[1],
-        )
+        self._physical_page = PhysicalPage(self._physical_service, parent=self)
+        self._tabs.addTab(self._physical_page, TAB_NAMES[1])
         self._tabs.addTab(
             self._build_domain_page(
                 title="设备和计算安全",

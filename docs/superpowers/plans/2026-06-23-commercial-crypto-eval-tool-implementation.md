@@ -991,7 +991,7 @@ git commit -m "feat: add shared UI widgets and autosave manager"
 - Test: `tests/integration/test_physical_service.py`
 - Test: `tests/ui/test_physical_page.py`
 
-- [ ] **Step 1: 写物理对象创建测试**
+- [x] **Step 1: 写物理对象创建测试**
 
 ```python
 def test_create_physical_object_creates_three_details(app_services, project):
@@ -1002,7 +1002,7 @@ def test_create_physical_object_creates_three_details(app_services, project):
     assert details.video_integrity is not None
 ```
 
-- [ ] **Step 2: 实现 PhysicalRepository**
+- [x] **Step 2: 实现 PhysicalRepository**
 
 Queries:
 
@@ -1012,7 +1012,7 @@ Queries:
 - Delete object with detail IDs.
 - Update object base fields.
 
-- [ ] **Step 3: 实现 PhysicalService**
+- [x] **Step 3: 实现 PhysicalService**
 
 Methods:
 
@@ -1024,7 +1024,7 @@ Methods:
 
 `save_detail` must save object fields, three detail units, products, quant values, risk fields, and emit enough info for UI refresh.
 
-- [ ] **Step 4: 写删除范围测试**
+- [x] **Step 4: 写删除范围测试**
 
 ```python
 def test_delete_physical_object_removes_quant_for_its_details_only(app_services, two_projects_with_physical):
@@ -1034,7 +1034,7 @@ def test_delete_physical_object_removes_quant_for_its_details_only(app_services,
     assert app_services.quant.exists_for_related(other.auth_detail_id) is True
 ```
 
-- [ ] **Step 5: 实现 PhysicalPage**
+- [x] **Step 5: 实现 PhysicalPage**
 
 UI must:
 
@@ -1044,7 +1044,7 @@ UI must:
 - Use QuantWidget, RiskWidget, ProductListWidget, evidence buttons.
 - Refresh left list name after save.
 
-- [ ] **Step 6: 运行验证**
+- [x] **Step 6: 运行验证**
 
 ```powershell
 python -m pytest tests/integration/test_physical_service.py tests/ui/test_physical_page.py -q
@@ -1056,7 +1056,7 @@ Expected:
 all tests passed
 ```
 
-- [ ] **Step 7: 提交**
+- [x] **Step 7: 提交**
 
 ```powershell
 git add mpxccp/repositories/physical_repo.py mpxccp/services/physical_service.py mpxccp/ui/pages/physical_page.py tests/integration/test_physical_service.py tests/ui/test_physical_page.py

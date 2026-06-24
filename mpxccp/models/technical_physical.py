@@ -60,6 +60,7 @@ class PhysicalAuthDetail(
     )
     auth_methods: Mapped[str] = mapped_column(Text, default="", nullable=False)
     access_control_device: Mapped[str] = mapped_column(String(255), default="", nullable=False)
+    extra_data: Mapped[dict | None] = mapped_column(JSON, nullable=True)
 
 
 class PhysicalAccessIntegrityDetail(
@@ -88,6 +89,7 @@ class PhysicalAccessIntegrityDetail(
     )
     record_source: Mapped[str] = mapped_column(String(255), default="", nullable=False)
     integrity_method: Mapped[str] = mapped_column(Text, default="", nullable=False)
+    extra_data: Mapped[dict | None] = mapped_column(JSON, nullable=True)
 
 
 class PhysicalVideoIntegrityDetail(
@@ -116,3 +118,4 @@ class PhysicalVideoIntegrityDetail(
     )
     video_record_source: Mapped[str] = mapped_column(String(255), default="", nullable=False)
     integrity_method: Mapped[str] = mapped_column(Text, default="", nullable=False)
+    extra_data: Mapped[dict | None] = mapped_column(JSON, nullable=True)
