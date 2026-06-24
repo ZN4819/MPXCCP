@@ -1150,7 +1150,7 @@ git commit -m "feat: implement device security module"
 - Test: `tests/integration/test_network_service.py`
 - Test: `tests/ui/test_network_page.py`
 
-- [ ] **Step 1: 写子系统同步测试**
+- [x] **Step 1: 写子系统同步测试**
 
 ```python
 def test_network_sync_adds_new_subsystem_without_clearing_existing_channels(app_services, project):
@@ -1163,7 +1163,7 @@ def test_network_sync_adds_new_subsystem_without_clearing_existing_channels(app_
     assert app_services.network.channel_count(first.id) == 1
 ```
 
-- [ ] **Step 2: 实现 NetworkRepository**
+- [x] **Step 2: 实现 NetworkRepository**
 
 Must support:
 
@@ -1172,7 +1172,7 @@ Must support:
 - Delete channel with quant/evidence cleanup.
 - Load and save four unit details.
 
-- [ ] **Step 3: 实现 NetworkService**
+- [x] **Step 3: 实现 NetworkService**
 
 Methods:
 
@@ -1181,7 +1181,7 @@ Methods:
 - `save_channel_detail(channel_id, payload, silent)`
 - `delete_channel(channel_id)`
 
-- [ ] **Step 4: 写边界完整性关联测试**
+- [x] **Step 4: 写边界完整性关联测试**
 
 ```python
 def test_network_boundary_quant_and_evidence_use_boundary_detail(app_services, network_channel):
@@ -1190,7 +1190,7 @@ def test_network_boundary_quant_and_evidence_use_boundary_detail(app_services, n
     assert rule_ref.related_id == details.boundary.id
 ```
 
-- [ ] **Step 5: 实现 NetworkPage**
+- [x] **Step 5: 实现 NetworkPage**
 
 UI must:
 
@@ -1199,7 +1199,7 @@ UI must:
 - Include four measurement sections.
 - Keep network boundary product list absent while quant/evidence remain available.
 
-- [ ] **Step 6: 运行验证**
+- [x] **Step 6: 运行验证**
 
 ```powershell
 python -m pytest tests/integration/test_network_service.py tests/ui/test_network_page.py -q
@@ -1211,7 +1211,7 @@ Expected:
 all tests passed
 ```
 
-- [ ] **Step 7: 提交**
+- [x] **Step 7: 提交**
 
 ```powershell
 git add mpxccp/repositories/network_repo.py mpxccp/services/network_service.py mpxccp/ui/pages/network_page.py tests/integration/test_network_service.py tests/ui/test_network_page.py

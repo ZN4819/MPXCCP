@@ -94,6 +94,7 @@ class NetworkAuthDetail(
     )
     auth_methods: Mapped[str] = mapped_column(Text, default="", nullable=False)
     certificate_usage: Mapped[str] = mapped_column(Text, default="", nullable=False)
+    extra_data: Mapped[dict | None] = mapped_column(JSON, nullable=True)
 
 
 class NetworkIntegrityDetail(
@@ -122,6 +123,7 @@ class NetworkIntegrityDetail(
     )
     integrity_method: Mapped[str] = mapped_column(Text, default="", nullable=False)
     certificate_usage: Mapped[str] = mapped_column(Text, default="", nullable=False)
+    extra_data: Mapped[dict | None] = mapped_column(JSON, nullable=True)
 
 
 class NetworkConfidentialityDetail(
@@ -150,6 +152,7 @@ class NetworkConfidentialityDetail(
     )
     encryption_method: Mapped[str] = mapped_column(Text, default="", nullable=False)
     certificate_usage: Mapped[str] = mapped_column(Text, default="", nullable=False)
+    extra_data: Mapped[dict | None] = mapped_column(JSON, nullable=True)
 
 
 class NetworkBoundaryIntegrityDetail(
@@ -183,3 +186,4 @@ class NetworkBoundaryIntegrityDetail(
         nullable=True,
     )
     integrity_method: Mapped[str] = mapped_column(Text, default="", nullable=False)
+    extra_data: Mapped[dict | None] = mapped_column(JSON, nullable=True)
