@@ -797,13 +797,13 @@ git commit -m "feat: add shared quant product evidence and knowledge services"
 **Files:**
 - Modify: `mpxccp/bootstrap.py`
 - Create: `mpxccp/ui/main_window.py`
-- Create: `mpxccp/ui/styles/app.qss`
+- Create: `mpxccp/resources/styles/app.qss`
 - Create: `mpxccp/integration/packaging/resource_check.py`
-- Create: `mpxccp/resources/icons/.keep`
+- Create: `mpxccp/resources/icons/app.png`
 - Test: `tests/ui/test_main_window.py`
 - Test: `tests/integration/test_resource_check.py`
 
-- [ ] **Step 1: 写主窗口测试**
+- [x] **Step 1: 写主窗口测试**
 
 ```python
 def test_main_window_has_required_tabs(qtbot):
@@ -821,7 +821,7 @@ def test_main_window_has_required_tabs(qtbot):
     ]
 ```
 
-- [ ] **Step 2: 实现 MainWindow 壳**
+- [x] **Step 2: 实现 MainWindow 壳**
 
 MainWindow must include:
 
@@ -832,7 +832,7 @@ MainWindow must include:
 - `set_project_context(project_id, system_name, flow_no)`.
 - `mark_scoring_dirty()`.
 
-- [ ] **Step 3: 实现启动行为**
+- [x] **Step 3: 实现启动行为**
 
 `bootstrap.py` must:
 
@@ -842,7 +842,7 @@ MainWindow must include:
 - Load icon and QSS.
 - Return `app.exec()`.
 
-- [ ] **Step 4: 写资源校验测试**
+- [x] **Step 4: 写资源校验测试**
 
 ```python
 from mpxccp.integration.packaging.resource_check import required_resources, validate_resources
@@ -854,11 +854,11 @@ def test_required_resources_are_declared():
     assert "icons/app.png" in resources
 ```
 
-- [ ] **Step 5: 实现资源校验**
+- [x] **Step 5: 实现资源校验**
 
 `resource_check.py` returns required icons and templates, and `validate_resources(base_path)` returns missing paths without raising.
 
-- [ ] **Step 6: 运行验证**
+- [x] **Step 6: 运行验证**
 
 ```powershell
 python -m pytest tests/ui/test_main_window.py tests/integration/test_resource_check.py -q
@@ -870,7 +870,7 @@ Expected:
 all tests passed
 ```
 
-- [ ] **Step 7: 提交**
+- [x] **Step 7: 提交**
 
 ```powershell
 git add mpxccp/bootstrap.py mpxccp/ui mpxccp/integration/packaging mpxccp/resources tests/ui/test_main_window.py tests/integration/test_resource_check.py
