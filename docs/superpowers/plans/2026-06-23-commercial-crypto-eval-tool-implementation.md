@@ -1076,7 +1076,7 @@ git commit -m "feat: implement physical security module"
 - Test: `tests/integration/test_device_service.py`
 - Test: `tests/ui/test_device_page.py`
 
-- [ ] **Step 1: 写设备对象创建测试**
+- [x] **Step 1: 写设备对象创建测试**
 
 ```python
 def test_create_device_object_creates_five_details(app_services, project):
@@ -1085,11 +1085,11 @@ def test_create_device_object_creates_five_details(app_services, project):
     assert len(details.all_detail_ids()) == 5
 ```
 
-- [ ] **Step 2: 实现 DeviceRepository**
+- [x] **Step 2: 实现 DeviceRepository**
 
 Must support object list, create with five detail records, load, update, delete.
 
-- [ ] **Step 3: 实现 DeviceService**
+- [x] **Step 3: 实现 DeviceService**
 
 Methods:
 
@@ -1098,7 +1098,7 @@ Methods:
 - `delete_object(object_id)`
 - `apply_product_level_quant_rule(unit_name, product_level)`
 
-- [ ] **Step 4: 写设备产品等级联动测试**
+- [x] **Step 4: 写设备产品等级联动测试**
 
 ```python
 def test_first_level_product_sets_k_fail_and_rk_1_2(app_services, project):
@@ -1106,7 +1106,7 @@ def test_first_level_product_sets_k_fail_and_rk_1_2(app_services, project):
     assert (result.d, result.a, result.k, result.rk) == ("√", "√", "×", 1.2)
 ```
 
-- [ ] **Step 5: 实现 DevicePage**
+- [x] **Step 5: 实现 DevicePage**
 
 UI must include five sections:
 
@@ -1118,7 +1118,7 @@ UI must include five sections:
 
 Remote management date fields must use DateInput.
 
-- [ ] **Step 6: 运行验证**
+- [x] **Step 6: 运行验证**
 
 ```powershell
 python -m pytest tests/integration/test_device_service.py tests/ui/test_device_page.py -q
@@ -1130,7 +1130,7 @@ Expected:
 all tests passed
 ```
 
-- [ ] **Step 7: 提交**
+- [x] **Step 7: 提交**
 
 ```powershell
 git add mpxccp/repositories/device_repo.py mpxccp/services/device_service.py mpxccp/ui/pages/device_page.py tests/integration/test_device_service.py tests/ui/test_device_page.py

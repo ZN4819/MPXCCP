@@ -121,6 +121,12 @@ class MigrationService:
                 "Ensure physical detail tables can store requirement-specific extension fields.",
                 self._ensure_physical_detail_extra_data_columns,
             ),
+            (
+                "device_detail_extra_data",
+                "1",
+                "Ensure device detail tables can store requirement-specific extension fields.",
+                self._ensure_device_detail_extra_data_columns,
+            ),
         )
         for name, version, description, migration in migrations:
             self._run_one(name, version, description, migration)
@@ -250,12 +256,30 @@ class MigrationService:
                 )
 
     def _ensure_physical_detail_extra_data_columns(self, session: Session) -> None:
+        self._ensure_extra_data_columns(
+            session,
+            (
+                "physical_auth_details",
+                "physical_access_integrity_details",
+                "physical_video_integrity_details",
+            ),
+        )
+
+    def _ensure_device_detail_extra_data_columns(self, session: Session) -> None:
+        self._ensure_extra_data_columns(
+            session,
+            (
+                "device_auth_details",
+                "device_remote_management_details",
+                "device_access_integrity_details",
+                "device_log_integrity_details",
+                "device_executable_integrity_details",
+            ),
+        )
+
+    def _ensure_extra_data_columns(self, session: Session, table_names: tuple[str, ...]) -> None:
         inspector = inspect(session.bind)
-        for table_name in (
-            "physical_auth_details",
-            "physical_access_integrity_details",
-            "physical_video_integrity_details",
-        ):
+        for table_name in table_names:
             columns = {column["name"] for column in inspector.get_columns(table_name)}
             if "extra_data" in columns:
                 continue
