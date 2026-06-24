@@ -1,0 +1,1 @@
+"""Evidence file integration adapters."""
