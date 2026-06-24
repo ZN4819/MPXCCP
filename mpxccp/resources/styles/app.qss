@@ -164,3 +164,21 @@ QStatusBar {
 QStatusBar QLabel {
     padding: 0 10px;
 }
+
+QWidget#quantWidget QComboBox {
+    min-width: 58px;
+}
+
+QWidget#dateInput QPushButton,
+QWidget#imageUploadWidget QPushButton,
+QWidget#knowledgePicker QPushButton,
+QDialog#evidenceDialog QPushButton,
+QWidget#productListWidget QPushButton {
+    min-height: 28px;
+}
+
+QCalendarWidget#datePopupCalendar {
+    background: #ffffff;
+    border: 1px solid #c8d3d8;
+    border-radius: 6px;
+}
