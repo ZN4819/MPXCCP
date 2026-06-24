@@ -1419,7 +1419,7 @@ git commit -m "feat: implement scoring engine and scoring page"
 - Create: `tests/fixtures/workbook_builders.py`
 - Test: `tests/integration/test_excel_import.py`
 
-- [ ] **Step 1: 写导入回滚测试**
+- [x] **Step 1: 写导入回滚测试**
 
 ```python
 def test_import_rolls_back_on_invalid_ra(app_services, workbook_builders, project):
@@ -1430,7 +1430,7 @@ def test_import_rolls_back_on_invalid_ra(app_services, workbook_builders, projec
     assert app_services.physical.list_objects(project.id) == []
 ```
 
-- [ ] **Step 2: 实现 Excel schema**
+- [x] **Step 2: 实现 Excel schema**
 
 `schema.py` must centralize:
 
@@ -1440,7 +1440,7 @@ def test_import_rolls_back_on_invalid_ra(app_services, workbook_builders, projec
 - Product text pattern.
 - Quant column order D/A/K/Ra/Rk.
 
-- [ ] **Step 3: 实现 ImportReader**
+- [x] **Step 3: 实现 ImportReader**
 
 Must support:
 
@@ -1451,7 +1451,7 @@ Must support:
 - Product text parsing.
 - Quant parsing with contextual errors.
 
-- [ ] **Step 4: 实现 ImportService**
+- [x] **Step 4: 实现 ImportService**
 
 Methods:
 
@@ -1465,7 +1465,7 @@ Methods:
 
 Must implement IMPORT-001 through IMPORT-014 and FR-090 through FR-095.
 
-- [ ] **Step 5: 写追加模式测试**
+- [x] **Step 5: 写追加模式测试**
 
 ```python
 def test_append_mode_imports_only_new_network_and_application_subsystems(app_services, workbook_builders, project):
@@ -1477,7 +1477,7 @@ def test_append_mode_imports_only_new_network_and_application_subsystems(app_ser
     assert app_services.network.has_subsystem(project.id, "新子系统")
 ```
 
-- [ ] **Step 6: 运行验证**
+- [x] **Step 6: 运行验证**
 
 ```powershell
 python -m pytest tests/integration/test_excel_import.py -q
