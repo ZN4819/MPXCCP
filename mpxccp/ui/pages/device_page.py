@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from typing import Any
 
-from PySide6.QtCore import Qt
+from PySide6.QtCore import Qt, Signal
 from PySide6.QtWidgets import (
     QComboBox,
     QFormLayout,
@@ -112,6 +112,8 @@ UNIT_FIELD_LABELS = {
 
 
 class DevicePage(QWidget):
+    scoring_dirty = Signal()
+
     def __init__(
         self,
         device_service: DeviceService | None = None,
@@ -191,6 +193,7 @@ class DevicePage(QWidget):
         self._require_ready()
         self.save_current_detail(silent=True)
         obj = self._service.create_object(self._project_id, str(name or "未命名设备对象"))
+        self.scoring_dirty.emit()
         self.refresh_objects(select_object_id=obj.id)
         return obj
 
@@ -220,6 +223,7 @@ class DevicePage(QWidget):
         )
         if result.success:
             self._update_current_list_item(str(result.payload.get("object_name", "")))
+            self.scoring_dirty.emit()
         return result
 
     def delete_current_object(self, *, confirm: bool = False):
@@ -238,6 +242,7 @@ class DevicePage(QWidget):
             self._current_object_id = None
             self._current_details = None
             self._current_evidence_context = None
+            self.scoring_dirty.emit()
             self.refresh_objects()
         return result
 

@@ -1322,7 +1322,7 @@ git commit -m "feat: implement application data security module"
 - Test: `tests/integration/test_scoring_service.py`
 - Test: `tests/ui/test_scoring_page.py`
 
-- [ ] **Step 1: 写评分初始化测试**
+- [x] **Step 1: 写评分初始化测试**
 
 ```python
 def test_scoring_initializes_41_indicators(app_services):
@@ -1332,7 +1332,7 @@ def test_scoring_initializes_41_indicators(app_services):
     assert {8, 12, 17}.issubset({item.no for item in indicators if item.always_not_applicable})
 ```
 
-- [ ] **Step 2: 实现 ScoringRepository**
+- [x] **Step 2: 实现 ScoringRepository**
 
 Must support:
 
@@ -1342,7 +1342,7 @@ Must support:
 - Score summary upsert.
 - Score detail replacement per summary.
 
-- [ ] **Step 3: 写技术域评分测试**
+- [x] **Step 3: 写技术域评分测试**
 
 ```python
 def test_scoring_refresh_creates_missing_empty_quant_record(app_services, project_with_physical_detail):
@@ -1352,7 +1352,7 @@ def test_scoring_refresh_creates_missing_empty_quant_record(app_services, projec
     assert app_services.quant.load("物理访问身份鉴别", detail_id) is not None
 ```
 
-- [ ] **Step 4: 实现 ScoringService**
+- [x] **Step 4: 实现 ScoringService**
 
 Methods:
 
@@ -1365,7 +1365,7 @@ Methods:
 
 Must implement SCORE-001 through SCORE-017.
 
-- [ ] **Step 5: 实现 ScoringPage**
+- [x] **Step 5: 实现 ScoringPage**
 
 UI must include:
 
@@ -1376,7 +1376,7 @@ UI must include:
 - Management editable tables.
 - Dirty recalculation button text exactly `⚠ 分数待更新 - 点击重新计算`.
 
-- [ ] **Step 6: 写 UI 表格测试**
+- [x] **Step 6: 写 UI 表格测试**
 
 ```python
 def test_scoring_page_dirty_button_text(qtbot):
@@ -1387,7 +1387,7 @@ def test_scoring_page_dirty_button_text(qtbot):
     assert page.recalculate_button_text() == "⚠ 分数待更新 - 点击重新计算"
 ```
 
-- [ ] **Step 7: 运行验证**
+- [x] **Step 7: 运行验证**
 
 ```powershell
 python -m pytest tests/integration/test_scoring_service.py tests/ui/test_scoring_page.py -q
@@ -1399,7 +1399,7 @@ Expected:
 all tests passed
 ```
 
-- [ ] **Step 8: 提交**
+- [x] **Step 8: 提交**
 
 ```powershell
 git add mpxccp/repositories/scoring_repo.py mpxccp/services/scoring_service.py mpxccp/ui/pages/scoring_page.py tests/integration/test_scoring_service.py tests/ui/test_scoring_page.py

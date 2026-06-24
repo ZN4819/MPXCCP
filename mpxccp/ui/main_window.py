@@ -31,7 +31,9 @@ from mpxccp.services.application_service import ApplicationService
 from mpxccp.services.device_service import DeviceService
 from mpxccp.services.network_service import NetworkService
 from mpxccp.services.physical_service import PhysicalService
-from mpxccp.ui.pages import ApplicationPage, DevicePage, NetworkPage, PhysicalPage
+from mpxccp.services.quant_service import QuantService
+from mpxccp.services.scoring_service import ScoringService
+from mpxccp.ui.pages import ApplicationPage, DevicePage, NetworkPage, PhysicalPage, ScoringPage
 
 MAIN_WINDOW_TITLE = "商用密码应用安全性评估实施工具"
 
@@ -134,12 +136,14 @@ class MainWindow(QMainWindow):
         device_service: DeviceService | None = None,
         network_service: NetworkService | None = None,
         application_service: ApplicationService | None = None,
+        scoring_service: ScoringService | None = None,
     ) -> None:
         super().__init__()
         self._physical_service = physical_service
         self._device_service = device_service
         self._network_service = network_service
         self._application_service = application_service
+        self._scoring_service = scoring_service
         self.current_project_id: int | None = None
         self.current_project_name = "未打开"
         self.current_flow_no = "--"
@@ -193,6 +197,8 @@ class MainWindow(QMainWindow):
         self._device_page.set_project_id(project_id)
         self._network_page.set_project_id(project_id)
         self._application_page.set_project_id(project_id)
+        self._scoring_page.set_project_id(project_id)
+        self._refresh_effective_d_count()
         self._refresh_status_bar()
 
     def physical_page(self) -> PhysicalPage:
@@ -207,12 +213,17 @@ class MainWindow(QMainWindow):
     def application_page(self) -> ApplicationPage:
         return self._application_page
 
+    def scoring_page(self) -> ScoringPage:
+        return self._scoring_page
+
     def set_effective_d_count(self, count: int | None) -> None:
         self.effective_d_count = max(count or 0, 0)
         self._refresh_status_bar()
 
     def mark_scoring_dirty(self) -> None:
         self.is_scoring_dirty = True
+        self._scoring_page.mark_dirty()
+        self._refresh_effective_d_count()
         self.statusBar().showMessage("评分待更新")
 
     def trigger_action(self, action_text: str) -> None:
@@ -278,9 +289,13 @@ class MainWindow(QMainWindow):
             network_service=self._network_service,
             parent=self,
         )
-        self._application_page.scoring_dirty.connect(self.mark_scoring_dirty)
         self._tabs.addTab(self._application_page, TAB_NAMES[4])
-        self._tabs.addTab(self._build_scoring_page(), TAB_NAMES[5])
+        self._scoring_page = ScoringPage(self._scoring_service, parent=self)
+        self._tabs.addTab(self._scoring_page, TAB_NAMES[5])
+        self._physical_page.scoring_dirty.connect(self.mark_scoring_dirty)
+        self._device_page.scoring_dirty.connect(self.mark_scoring_dirty)
+        self._network_page.scoring_dirty.connect(self.mark_scoring_dirty)
+        self._application_page.scoring_dirty.connect(self.mark_scoring_dirty)
         self._tabs.currentChanged.connect(self._on_tab_changed)
         self.setCentralWidget(self._tabs)
 
@@ -425,6 +440,7 @@ class MainWindow(QMainWindow):
             self._save_basic_info_silently()
         if index == TAB_NAMES.index("应用和数据安全"):
             self._application_page.refresh_network_channels()
+        self._refresh_effective_d_count()
 
     def _save_basic_info_silently(self) -> None:
         if self._basic_info_save_handler is None:
@@ -453,3 +469,28 @@ class MainWindow(QMainWindow):
         self._project_status.setText(f"当前项目：{self.current_project_name}")
         self._flow_status.setText(f"流转编号：{self.current_flow_no}")
         self._effective_d_status.setText(f"有效D：{self.effective_d_count}")
+
+    def _refresh_effective_d_count(self) -> None:
+        if self.current_project_id is None:
+            self.effective_d_count = 0
+            return
+        engine = self._service_engine()
+        if engine is None:
+            self.effective_d_count = 0
+        else:
+            self.effective_d_count = QuantService(engine).count_effective_d(self.current_project_id)
+        if hasattr(self, "_effective_d_status"):
+            self._effective_d_status.setText(f"有效D：{self.effective_d_count}")
+
+    def _service_engine(self):
+        for service in (
+            self._scoring_service,
+            self._application_service,
+            self._network_service,
+            self._device_service,
+            self._physical_service,
+        ):
+            engine = getattr(service, "engine", None)
+            if engine is not None:
+                return engine
+        return None

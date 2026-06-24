@@ -700,6 +700,7 @@ class ApplicationPage(QWidget):
             ),
         }
         record = create_methods[kind]()
+        self.scoring_dirty.emit()
         self._current_kind = kind
         self._select_tab(kind)
         self._refresh_object_list(kind, select_object_id=record.id)

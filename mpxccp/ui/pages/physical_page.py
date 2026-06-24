@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from typing import Any
 
-from PySide6.QtCore import Qt
+from PySide6.QtCore import Qt, Signal
 from PySide6.QtWidgets import (
     QComboBox,
     QFormLayout,
@@ -41,6 +41,8 @@ OBJECT_FIELD_LABELS = {
 
 
 class PhysicalPage(QWidget):
+    scoring_dirty = Signal()
+
     def __init__(
         self,
         physical_service: PhysicalService | None = None,
@@ -106,6 +108,7 @@ class PhysicalPage(QWidget):
         self._require_ready()
         self.save_current_detail(silent=True)
         obj = self._service.create_object(self._project_id, str(name or "未命名物理对象"))
+        self.scoring_dirty.emit()
         self.refresh_objects(select_object_id=obj.id)
         return obj
 
@@ -135,6 +138,7 @@ class PhysicalPage(QWidget):
         )
         if result.success:
             self._update_current_list_item(str(result.payload.get("object_name", "")))
+            self.scoring_dirty.emit()
         return result
 
     def delete_current_object(self, *, confirm: bool = False):
@@ -153,6 +157,7 @@ class PhysicalPage(QWidget):
             self._current_object_id = None
             self._current_details = None
             self._current_evidence_context = None
+            self.scoring_dirty.emit()
             self.refresh_objects()
         return result
 
