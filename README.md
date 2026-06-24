@@ -4,7 +4,7 @@
 
 ## 当前状态
 
-当前仓库已完成需求、设计、实施计划、Task 1 工程初始化、Task 2 领域规则、Task 3 持久化基础、Task 4 项目生命周期服务、Task 5 共享服务、Task 6 桌面主窗口壳、Task 7 通用 UI 控件、Task 8 物理和环境安全模块、Task 9 设备和计算安全模块、Task 10 网络和通信安全模块、Task 11 应用和数据安全模块和 Task 12 评分引擎、评分页与有效 D 统计。Task 12 已建立评分仓储/服务/页面，覆盖 41 项指标初始化、8/12/17 固定不适用、技术域刷新补建空量化记录、管理域自动落库、70/30 汇总、评分明细持久化、待更新状态和主窗口接入。
+当前仓库已完成需求、设计、实施计划、Task 1 工程初始化、Task 2 领域规则、Task 3 持久化基础、Task 4 项目生命周期服务、Task 5 共享服务、Task 6 桌面主窗口壳、Task 7 通用 UI 控件、Task 8 物理和环境安全模块、Task 9 设备和计算安全模块、Task 10 网络和通信安全模块、Task 11 应用和数据安全模块、Task 12 评分引擎、评分页与有效 D 统计和 Task 13 访谈模板 Excel 导入。Task 13 已建立 Excel schema、导入 reader 和单事务导入服务，覆盖 `.xlsx`/50MB 校验、产品文本解析、D/A/K/Ra/Rk 清洗、替换导入、追加导入、Ra/Rk 错误回滚和网络替换时应用信道引用清理。
 
 - `开发需求文档.md`：最高优先级需求基线，记录功能、数据结构、交互行为、评分公式、Excel 协议、证据文件协议、保存协议和兼容边界。
 - `开发设计方案.md`：开发设计方案，明确推荐技术栈、总体架构、数据模型、模块边界、测试与验收方案。
@@ -30,6 +30,7 @@
 - 网络和通信安全：`mpxccp/repositories/network_repo.py`、`mpxccp/services/network_service.py`、`mpxccp/ui/pages/network_page.py`
 - 应用和数据安全：`mpxccp/repositories/application_repo.py`、`mpxccp/services/application_service.py`、`mpxccp/ui/pages/application_page.py`
 - 评分：`mpxccp/repositories/scoring_repo.py`、`mpxccp/services/scoring_service.py`、`mpxccp/ui/pages/scoring_page.py`
+- Excel 导入：`mpxccp/integration/excel/schema.py`、`mpxccp/integration/excel/import_reader.py`、`mpxccp/services/import_service.py`
 - 证据适配器：`mpxccp/integration/evidence/file_store.py`、`mpxccp/integration/evidence/thumbnails.py`
 - UI 主窗口：`mpxccp/ui/main_window.py`
 - 通用 UI 控件：`mpxccp/ui/widgets/`
@@ -45,6 +46,7 @@
 - 设备模块测试：`tests/integration/test_device_service.py`
 - 网络模块测试：`tests/integration/test_network_service.py`
 - 评分模块测试：`tests/integration/test_scoring_service.py`、`tests/ui/test_scoring_page.py`
+- Excel 导入测试：`tests/integration/test_excel_import.py`
 - 资源校验测试：`tests/integration/test_resource_check.py`
 - 工程配置：`pyproject.toml`
 
@@ -113,8 +115,10 @@ docs/superpowers/plans/2026-06-23-commercial-crypto-eval-tool-implementation.md
 10. 网络和通信安全模块。已完成。
 11. 应用和数据安全模块。已完成。
 12. 评分引擎、评分页和有效 D 统计。已完成。
-13. Excel、问题清单和知识库。下一步。
-14. 数据治理、安装包和端到端验收。
+13. 访谈模板 Excel 导入。已完成。
+14. 全量数据、所选模块和打分表导出导入。下一步。
+15. 问题清单和知识库。
+16. 数据治理、安装包和端到端验收。
 
 ## 未来验证命令
 

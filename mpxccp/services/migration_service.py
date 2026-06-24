@@ -149,6 +149,9 @@ class MigrationService:
         for name, version, description, migration in migrations:
             self._run_one(name, version, description, migration)
 
+    def clean_enum_values(self, session: Session) -> None:
+        self._run_enum_cleanup(session)
+
     def _run_one(
         self,
         name: str,
