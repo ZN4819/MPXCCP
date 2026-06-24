@@ -4,7 +4,7 @@
 
 ## 当前状态
 
-当前仓库已完成需求、设计、实施计划、Task 1 工程初始化、Task 2 领域规则、Task 3 持久化基础和 Task 4 项目生命周期服务。Task 4 建立了项目软删除/恢复/硬删除、基本信息保存、系统与密码应用信息往返、子系统同步和对应集成测试。
+当前仓库已完成需求、设计、实施计划、Task 1 工程初始化、Task 2 领域规则、Task 3 持久化基础、Task 4 项目生命周期服务和 Task 5 共享服务。Task 5 建立了量化评估、风险判定、密码产品、证据文件、知识库服务和对应集成测试。
 
 - `开发需求文档.md`：最高优先级需求基线，记录功能、数据结构、交互行为、评分公式、Excel 协议、证据文件协议、保存协议和兼容边界。
 - `开发设计方案.md`：开发设计方案，明确推荐技术栈、总体架构、数据模型、模块边界、测试与验收方案。
@@ -23,10 +23,14 @@
 - 迁移服务：`mpxccp/services/migration_service.py`
 - 项目生命周期服务：`mpxccp/services/project_service.py`
 - 基本信息服务：`mpxccp/services/basic_info_service.py`
+- 共享 Repository：`mpxccp/repositories/shared_repo.py`、`mpxccp/repositories/knowledge_repo.py`
+- 共享业务服务：`mpxccp/services/quant_service.py`、`mpxccp/services/risk_service.py`、`mpxccp/services/product_service.py`、`mpxccp/services/evidence_service.py`、`mpxccp/services/knowledge_service.py`
+- 证据适配器：`mpxccp/integration/evidence/file_store.py`、`mpxccp/integration/evidence/thumbnails.py`
 - 基础测试：`tests/unit/test_bootstrap.py`
 - 领域测试：`tests/unit/test_quant_rules.py`、`tests/unit/test_scoring_rules.py`、`tests/unit/test_association_rules.py`
 - 数据库测试：`tests/integration/test_database_schema.py`
 - 项目与基本信息测试：`tests/integration/test_project_lifecycle.py`、`tests/integration/test_basic_info_service.py`
+- 共享服务测试：`tests/integration/test_shared_services.py`、`tests/integration/test_evidence_service.py`
 - 工程配置：`pyproject.toml`
 
 ## 推荐技术栈
@@ -86,10 +90,11 @@ docs/superpowers/plans/2026-06-23-commercial-crypto-eval-tool-implementation.md
 2. 领域规则。已完成。
 3. 数据库基础。已完成。
 4. 项目生命周期、基本信息和子系统同步。已完成。
-5. 共享服务、UI 壳和通用控件。下一步。
-6. 四类技术域模块并行实现。
-7. 评分、Excel、问题清单和知识库。
-8. 数据治理、安装包和端到端验收。
+5. 共享服务。已完成。
+6. UI 壳和通用控件。下一步。
+7. 四类技术域模块并行实现。
+8. 评分、Excel、问题清单和知识库。
+9. 数据治理、安装包和端到端验收。
 
 ## 未来验证命令
 
@@ -100,6 +105,7 @@ python -m pytest tests/unit/test_bootstrap.py -q
 python -m pytest tests/unit/test_quant_rules.py tests/unit/test_scoring_rules.py tests/unit/test_association_rules.py -q
 python -m pytest tests/integration/test_database_schema.py -q
 python -m pytest tests/integration/test_project_lifecycle.py tests/integration/test_basic_info_service.py -q
+python -m pytest tests/integration/test_shared_services.py tests/integration/test_evidence_service.py -q
 ```
 
 完整工程逐步实现后，最终回归应至少包含：

@@ -673,7 +673,7 @@ git commit -m "feat: implement project lifecycle and basic info services"
 - Test: `tests/integration/test_shared_services.py`
 - Test: `tests/integration/test_evidence_service.py`
 
-- [ ] **Step 1: 写量化服务测试**
+- [x] **Step 1: 写量化服务测试**
 
 ```python
 def test_quant_save_is_idempotent(app_services, detail_ref):
@@ -683,7 +683,7 @@ def test_quant_save_is_idempotent(app_services, detail_ref):
     assert second.changed is False
 ```
 
-- [ ] **Step 2: 实现 QuantService**
+- [x] **Step 2: 实现 QuantService**
 
 Methods:
 
@@ -694,7 +694,7 @@ Methods:
 
 Effective D count must follow SAVE-010 and FR-125 exactly.
 
-- [ ] **Step 3: 实现 RiskService**
+- [x] **Step 3: 实现 RiskService**
 
 Methods:
 
@@ -702,7 +702,7 @@ Methods:
 - `should_show_rectification(final_level)`
 - `normalize_risk_fields(data, mode)`
 
-- [ ] **Step 4: 写产品服务测试**
+- [x] **Step 4: 写产品服务测试**
 
 ```python
 def test_project_products_deduplicate_by_certificate(app_services, project):
@@ -716,7 +716,7 @@ def test_project_products_deduplicate_by_certificate(app_services, project):
     assert [item.certificate_no for item in products] == ["CERT-1"]
 ```
 
-- [ ] **Step 5: 实现 ProductService**
+- [x] **Step 5: 实现 ProductService**
 
 Methods:
 
@@ -727,7 +727,7 @@ Methods:
 
 Must keep PARENT-007 compatibility.
 
-- [ ] **Step 6: 写证据服务测试**
+- [x] **Step 6: 写证据服务测试**
 
 ```python
 def test_evidence_import_copies_file_and_records_relative_name(app_services, tmp_path, project):
@@ -746,7 +746,7 @@ def test_evidence_import_copies_file_and_records_relative_name(app_services, tmp
     assert result.records[0].file_name.startswith("1. 物理身份鉴别_现场")
 ```
 
-- [ ] **Step 7: 实现 EvidenceService 和文件适配器**
+- [x] **Step 7: 实现 EvidenceService 和文件适配器**
 
 Must implement EVID-001 through EVID-012:
 
@@ -758,7 +758,7 @@ Must implement EVID-001 through EVID-012:
 - Delete with record removal even when disk file is missing.
 - Renumber via temporary names.
 
-- [ ] **Step 8: 实现 KnowledgeService**
+- [x] **Step 8: 实现 KnowledgeService**
 
 Methods:
 
@@ -769,7 +769,7 @@ Methods:
 - `dedupe_append(entries)`
 - `replace_all(entries)`
 
-- [ ] **Step 9: 运行验证**
+- [x] **Step 9: 运行验证**
 
 ```powershell
 python -m pytest tests/integration/test_shared_services.py tests/integration/test_evidence_service.py -q
@@ -781,7 +781,7 @@ Expected:
 all tests passed
 ```
 
-- [ ] **Step 10: 提交**
+- [x] **Step 10: 提交**
 
 ```powershell
 git add mpxccp/repositories/shared_repo.py mpxccp/repositories/knowledge_repo.py mpxccp/services/quant_service.py mpxccp/services/risk_service.py mpxccp/services/product_service.py mpxccp/services/evidence_service.py mpxccp/services/knowledge_service.py mpxccp/integration/evidence tests/integration/test_shared_services.py tests/integration/test_evidence_service.py
