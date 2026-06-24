@@ -16,11 +16,11 @@ class ThumbnailGenerator:
             return None
 
         try:
-            thumbnail_dir = source.parent / ".thumbnails"
-            thumbnail_dir.mkdir(exist_ok=True)
-            thumbnail_path = thumbnail_dir / f"{source.stem}.png"
             with Image.open(source) as image:
                 image.thumbnail(max_size)
+                thumbnail_dir = source.parent / ".thumbnails"
+                thumbnail_dir.mkdir(exist_ok=True)
+                thumbnail_path = thumbnail_dir / f"{source.stem}.png"
                 image.save(thumbnail_path, format="PNG")
             return thumbnail_path
         except Exception:
