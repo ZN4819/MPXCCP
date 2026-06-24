@@ -4,7 +4,7 @@
 
 ## 当前状态
 
-当前仓库已完成需求、设计、实施计划、Task 1 工程初始化、Task 2 领域规则、Task 3 持久化基础、Task 4 项目生命周期服务、Task 5 共享服务、Task 6 桌面主窗口壳、Task 7 通用 UI 控件、Task 8 物理和环境安全模块、Task 9 设备和计算安全模块和 Task 10 网络和通信安全模块。Task 10 已建立网络子系统同步、通信信道仓储/服务/页面，覆盖四类网络测评单元详情创建、保存、量化/证据详情关联、前三类产品信道关联、边界单元无产品写入口、同步前保存、删除范围和主窗口接入。
+当前仓库已完成需求、设计、实施计划、Task 1 工程初始化、Task 2 领域规则、Task 3 持久化基础、Task 4 项目生命周期服务、Task 5 共享服务、Task 6 桌面主窗口壳、Task 7 通用 UI 控件、Task 8 物理和环境安全模块、Task 9 设备和计算安全模块、Task 10 网络和通信安全模块和 Task 11 应用和数据安全模块。Task 11 已建立应用子系统同步、四类应用对象仓储/服务/页面，覆盖七类应用测评单元详情创建、保存、量化/证据详情关联、产品外层对象关联、传输单元通信信道选择、同步前保存、删除范围和主窗口接入。
 
 - `开发需求文档.md`：最高优先级需求基线，记录功能、数据结构、交互行为、评分公式、Excel 协议、证据文件协议、保存协议和兼容边界。
 - `开发设计方案.md`：开发设计方案，明确推荐技术栈、总体架构、数据模型、模块边界、测试与验收方案。
@@ -28,6 +28,7 @@
 - 物理和环境安全：`mpxccp/repositories/physical_repo.py`、`mpxccp/services/physical_service.py`、`mpxccp/ui/pages/physical_page.py`
 - 设备和计算安全：`mpxccp/repositories/device_repo.py`、`mpxccp/services/device_service.py`、`mpxccp/ui/pages/device_page.py`
 - 网络和通信安全：`mpxccp/repositories/network_repo.py`、`mpxccp/services/network_service.py`、`mpxccp/ui/pages/network_page.py`
+- 应用和数据安全：`mpxccp/repositories/application_repo.py`、`mpxccp/services/application_service.py`、`mpxccp/ui/pages/application_page.py`
 - 证据适配器：`mpxccp/integration/evidence/file_store.py`、`mpxccp/integration/evidence/thumbnails.py`
 - UI 主窗口：`mpxccp/ui/main_window.py`
 - 通用 UI 控件：`mpxccp/ui/widgets/`
@@ -108,8 +109,8 @@ docs/superpowers/plans/2026-06-23-commercial-crypto-eval-tool-implementation.md
 8. 物理和环境安全模块。已完成。
 9. 设备和计算安全模块。已完成。
 10. 网络和通信安全模块。已完成。
-11. 应用和数据安全模块。下一步。
-12. 评分、Excel、问题清单和知识库。
+11. 应用和数据安全模块。已完成。
+12. 评分、Excel、问题清单和知识库。下一步。
 13. 数据治理、安装包和端到端验收。
 
 ## 未来验证命令
@@ -128,6 +129,7 @@ uv pip install --python .venv\Scripts\python.exe -e ".[dev]"
 .venv\Scripts\python.exe -m pytest tests/integration/test_physical_service.py tests/ui/test_physical_page.py -q
 .venv\Scripts\python.exe -m pytest tests/integration/test_device_service.py tests/ui/test_device_page.py -q
 .venv\Scripts\python.exe -m pytest tests/integration/test_network_service.py tests/ui/test_network_page.py -q
+.venv\Scripts\python.exe -m pytest tests/integration/test_application_service.py tests/ui/test_application_page.py -q
 .venv\Scripts\python.exe -m pytest tests/ui/test_quant_widget.py tests/ui/test_autosave_manager.py tests/ui/test_date_input.py tests/ui/test_risk_widget.py tests/ui/test_product_list_widget.py tests/ui/test_evidence_dialog.py tests/ui/test_widget_exports.py -q
 ```
 

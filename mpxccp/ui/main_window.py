@@ -27,10 +27,11 @@ from PySide6.QtWidgets import (
     QWidget,
 )
 
+from mpxccp.services.application_service import ApplicationService
 from mpxccp.services.device_service import DeviceService
 from mpxccp.services.network_service import NetworkService
 from mpxccp.services.physical_service import PhysicalService
-from mpxccp.ui.pages import DevicePage, NetworkPage, PhysicalPage
+from mpxccp.ui.pages import ApplicationPage, DevicePage, NetworkPage, PhysicalPage
 
 MAIN_WINDOW_TITLE = "商用密码应用安全性评估实施工具"
 
@@ -132,11 +133,13 @@ class MainWindow(QMainWindow):
         physical_service: PhysicalService | None = None,
         device_service: DeviceService | None = None,
         network_service: NetworkService | None = None,
+        application_service: ApplicationService | None = None,
     ) -> None:
         super().__init__()
         self._physical_service = physical_service
         self._device_service = device_service
         self._network_service = network_service
+        self._application_service = application_service
         self.current_project_id: int | None = None
         self.current_project_name = "未打开"
         self.current_flow_no = "--"
@@ -189,6 +192,7 @@ class MainWindow(QMainWindow):
         self._physical_page.set_project_id(project_id)
         self._device_page.set_project_id(project_id)
         self._network_page.set_project_id(project_id)
+        self._application_page.set_project_id(project_id)
         self._refresh_status_bar()
 
     def physical_page(self) -> PhysicalPage:
@@ -199,6 +203,9 @@ class MainWindow(QMainWindow):
 
     def network_page(self) -> NetworkPage:
         return self._network_page
+
+    def application_page(self) -> ApplicationPage:
+        return self._application_page
 
     def set_effective_d_count(self, count: int | None) -> None:
         self.effective_d_count = max(count or 0, 0)
@@ -266,14 +273,13 @@ class MainWindow(QMainWindow):
         self._tabs.addTab(self._device_page, TAB_NAMES[2])
         self._network_page = NetworkPage(self._network_service, parent=self)
         self._tabs.addTab(self._network_page, TAB_NAMES[3])
-        self._tabs.addTab(
-            self._build_domain_page(
-                title="应用和数据安全",
-                objects=["业务应用", "用户鉴别", "数据传输", "数据存储"],
-                detail_labels=["应用对象", "数据类型", "密码应用措施"],
-            ),
-            TAB_NAMES[4],
+        self._application_page = ApplicationPage(
+            self._application_service,
+            network_service=self._network_service,
+            parent=self,
         )
+        self._application_page.scoring_dirty.connect(self.mark_scoring_dirty)
+        self._tabs.addTab(self._application_page, TAB_NAMES[4])
         self._tabs.addTab(self._build_scoring_page(), TAB_NAMES[5])
         self._tabs.currentChanged.connect(self._on_tab_changed)
         self.setCentralWidget(self._tabs)
@@ -417,6 +423,8 @@ class MainWindow(QMainWindow):
         self._last_tab_index = index
         if previous_index == 0 and index != 0:
             self._save_basic_info_silently()
+        if index == TAB_NAMES.index("应用和数据安全"):
+            self._application_page.refresh_network_channels()
 
     def _save_basic_info_silently(self) -> None:
         if self._basic_info_save_handler is None:

@@ -133,6 +133,12 @@ class MigrationService:
                 "Ensure network detail tables can store requirement-specific extension fields.",
                 self._ensure_network_detail_extra_data_columns,
             ),
+            (
+                "application_detail_extra_data",
+                "1",
+                "Ensure application detail tables can store requirement-specific extension fields.",
+                self._ensure_application_detail_extra_data_columns,
+            ),
         )
         for name, version, description, migration in migrations:
             self._run_one(name, version, description, migration)
@@ -291,6 +297,20 @@ class MigrationService:
                 "network_integrity_details",
                 "network_confidentiality_details",
                 "network_boundary_integrity_details",
+            ),
+        )
+
+    def _ensure_application_detail_extra_data_columns(self, session: Session) -> None:
+        self._ensure_extra_data_columns(
+            session,
+            (
+                "application_user_auth_details",
+                "access_control_integrity_details",
+                "data_transport_confidentiality_details",
+                "data_storage_confidentiality_details",
+                "data_transport_integrity_details",
+                "data_storage_integrity_details",
+                "business_action_non_repudiation_details",
             ),
         )
 

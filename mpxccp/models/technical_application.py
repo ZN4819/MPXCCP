@@ -92,6 +92,7 @@ class ApplicationUserAuthDetail(
     )
     auth_methods: Mapped[str] = mapped_column(Text, default="", nullable=False)
     certificate_usage: Mapped[str] = mapped_column(Text, default="", nullable=False)
+    extra_data: Mapped[dict | None] = mapped_column(JSON, nullable=True)
 
 
 class AccessControlObject(
@@ -148,6 +149,7 @@ class AccessControlIntegrityDetail(
     )
     access_control_policy: Mapped[str] = mapped_column(Text, default="", nullable=False)
     integrity_method: Mapped[str] = mapped_column(Text, default="", nullable=False)
+    extra_data: Mapped[dict | None] = mapped_column(JSON, nullable=True)
 
 
 class ImportantData(
@@ -225,6 +227,7 @@ class DataTransportConfidentialityDetail(
         nullable=True,
     )
     encryption_method: Mapped[str] = mapped_column(Text, default="", nullable=False)
+    extra_data: Mapped[dict | None] = mapped_column(JSON, nullable=True)
 
 
 class DataStorageConfidentialityDetail(
@@ -253,6 +256,7 @@ class DataStorageConfidentialityDetail(
     )
     storage_location: Mapped[str] = mapped_column(String(255), default="", nullable=False)
     encryption_method: Mapped[str] = mapped_column(Text, default="", nullable=False)
+    extra_data: Mapped[dict | None] = mapped_column(JSON, nullable=True)
 
 
 class DataTransportIntegrityDetail(
@@ -290,6 +294,7 @@ class DataTransportIntegrityDetail(
         nullable=True,
     )
     integrity_method: Mapped[str] = mapped_column(Text, default="", nullable=False)
+    extra_data: Mapped[dict | None] = mapped_column(JSON, nullable=True)
 
 
 class DataStorageIntegrityDetail(
@@ -318,6 +323,7 @@ class DataStorageIntegrityDetail(
     )
     storage_location: Mapped[str] = mapped_column(String(255), default="", nullable=False)
     integrity_method: Mapped[str] = mapped_column(Text, default="", nullable=False)
+    extra_data: Mapped[dict | None] = mapped_column(JSON, nullable=True)
 
 
 class BusinessAction(
@@ -374,3 +380,4 @@ class BusinessActionNonRepudiationDetail(
     signature_method: Mapped[str] = mapped_column(Text, default="", nullable=False)
     timestamp_method: Mapped[str] = mapped_column(Text, default="", nullable=False)
     certificate_usage: Mapped[str] = mapped_column(Text, default="", nullable=False)
+    extra_data: Mapped[dict | None] = mapped_column(JSON, nullable=True)
