@@ -212,6 +212,7 @@ def test_main_window_marks_scoring_dirty_after_application_detail_save(qtbot, tm
     application_page = window.application_page()
     application_page.sync_from_basic_subsystems()
     application_page.add_user("Admin")
+    window.is_scoring_dirty = False
 
     assert window.is_scoring_dirty is False
 

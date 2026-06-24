@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from typing import Any
 
-from PySide6.QtCore import Qt
+from PySide6.QtCore import Qt, Signal
 from PySide6.QtWidgets import (
     QComboBox,
     QFormLayout,
@@ -98,6 +98,8 @@ UNIT_FIELD_LABELS = {
 
 
 class NetworkPage(QWidget):
+    scoring_dirty = Signal()
+
     def __init__(
         self,
         network_service: NetworkService | None = None,
@@ -210,6 +212,7 @@ class NetworkPage(QWidget):
             self._current_subsystem_id,
             str(name or "未命名通信信道"),
         )
+        self.scoring_dirty.emit()
         self.refresh_channels(select_channel_id=channel.id)
         return channel
 
@@ -252,6 +255,7 @@ class NetworkPage(QWidget):
         )
         if result.success:
             self._update_current_channel_item(str(result.payload.get("channel_name", "")))
+            self.scoring_dirty.emit()
         return result
 
     def delete_current_channel(self, *, confirm: bool = False):
@@ -270,6 +274,7 @@ class NetworkPage(QWidget):
             self._current_channel_id = None
             self._current_details = None
             self._current_evidence_context = None
+            self.scoring_dirty.emit()
             self.refresh_channels()
         return result
 
