@@ -566,7 +566,7 @@ git commit -m "feat: add persistence schema and migration foundation"
 - Test: `tests/integration/test_project_lifecycle.py`
 - Test: `tests/integration/test_basic_info_service.py`
 
-- [ ] **Step 1: 写项目生命周期测试**
+- [x] **Step 1: 写项目生命周期测试**
 
 Cover FR-010 through FR-015:
 
@@ -583,7 +583,7 @@ def test_soft_deleted_project_is_hidden_and_recoverable(app_services):
     assert project.id in [item.id for item in app_services.project.list_openable()]
 ```
 
-- [ ] **Step 2: 实现 `ServiceResult`**
+- [x] **Step 2: 实现 `ServiceResult`**
 
 Use a small result object with:
 
@@ -593,7 +593,7 @@ Use a small result object with:
 - `project_id: int | None`
 - `payload: dict[str, object]`
 
-- [ ] **Step 3: 实现 ProjectService**
+- [x] **Step 3: 实现 ProjectService**
 
 Methods:
 
@@ -606,7 +606,7 @@ Methods:
 
 Hard delete must follow DEL-003 order and must not delete disk evidence files.
 
-- [ ] **Step 4: 写基本信息测试**
+- [x] **Step 4: 写基本信息测试**
 
 Cover required fields and subsystem ordering:
 
@@ -623,7 +623,7 @@ def test_first_basic_info_save_creates_project_and_subsystems(app_services):
     assert app_services.basic_info.list_subsystems(result.project_id) == ["门户", "管理端"]
 ```
 
-- [ ] **Step 5: 实现 BasicInfoService**
+- [x] **Step 5: 实现 BasicInfoService**
 
 Methods:
 
@@ -635,7 +635,7 @@ Methods:
 
 Subsystem save must preserve existing IDs for same names, update sort order, and expose network/application sync events without clearing existing module data.
 
-- [ ] **Step 6: 运行验证**
+- [x] **Step 6: 运行验证**
 
 ```powershell
 python -m pytest tests/integration/test_project_lifecycle.py tests/integration/test_basic_info_service.py -q
@@ -647,7 +647,7 @@ Expected:
 all tests passed
 ```
 
-- [ ] **Step 7: 提交**
+- [x] **Step 7: 提交**
 
 ```powershell
 git add mpxccp/repositories/project_repo.py mpxccp/repositories/basic_info_repo.py mpxccp/services/result.py mpxccp/services/project_service.py mpxccp/services/basic_info_service.py tests/integration/test_project_lifecycle.py tests/integration/test_basic_info_service.py
