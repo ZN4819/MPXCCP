@@ -1231,7 +1231,7 @@ git commit -m "feat: implement network communication module"
 - Test: `tests/integration/test_application_service.py`
 - Test: `tests/ui/test_application_page.py`
 
-- [ ] **Step 1: 写应用子系统同步测试**
+- [x] **Step 1: 写应用子系统同步测试**
 
 ```python
 def test_application_sync_preserves_existing_objects(app_services, project):
@@ -1244,7 +1244,7 @@ def test_application_sync_preserves_existing_objects(app_services, project):
     assert app_services.application.user_count(subsystem.id) == 1
 ```
 
-- [ ] **Step 2: 实现 ApplicationRepository**
+- [x] **Step 2: 实现 ApplicationRepository**
 
 Must support:
 
@@ -1253,7 +1253,7 @@ Must support:
 - Create expected detail rows for each object.
 - Load/save object detail payloads.
 
-- [ ] **Step 3: 实现 ApplicationService**
+- [x] **Step 3: 实现 ApplicationService**
 
 Methods:
 
@@ -1268,7 +1268,7 @@ Methods:
 - `save_business_action_detail(...)`
 - `delete_application_object(kind, id)`
 
-- [ ] **Step 4: 写重要数据四详情测试**
+- [x] **Step 4: 写重要数据四详情测试**
 
 ```python
 def test_create_important_data_creates_four_details(app_services, application_subsystem):
@@ -1280,7 +1280,7 @@ def test_create_important_data_creates_four_details(app_services, application_su
     assert details.storage_integrity is not None
 ```
 
-- [ ] **Step 5: 实现 ApplicationPage**
+- [x] **Step 5: 实现 ApplicationPage**
 
 UI must:
 
@@ -1290,7 +1290,7 @@ UI must:
 - Use simplified risk mode for access control integrity and transport integrity.
 - Support communication channel selection for transport confidentiality and transport integrity.
 
-- [ ] **Step 6: 运行验证**
+- [x] **Step 6: 运行验证**
 
 ```powershell
 python -m pytest tests/integration/test_application_service.py tests/ui/test_application_page.py -q
@@ -1302,7 +1302,7 @@ Expected:
 all tests passed
 ```
 
-- [ ] **Step 7: 提交**
+- [x] **Step 7: 提交**
 
 ```powershell
 git add mpxccp/repositories/application_repo.py mpxccp/services/application_service.py mpxccp/ui/pages/application_page.py tests/integration/test_application_service.py tests/ui/test_application_page.py
