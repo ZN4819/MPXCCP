@@ -155,7 +155,18 @@ NETWORK_AUTH_COLUMNS = (
     "mitigated_level",
     "remediation",
 )
-NETWORK_COMMON_UNIT_COLUMNS = (
+NETWORK_INTEGRITY_COLUMNS = (
+    "implementation_status",
+    "algorithm",
+    "compliance_status",
+    "product_compliance",
+    "products",
+    *QUANT_COLUMNS,
+    "risk_level",
+    "risk_analysis",
+    "remediation",
+)
+NETWORK_CONFIDENTIALITY_COLUMNS = (
     "implementation_status",
     "algorithm",
     "compliance_status",
@@ -169,6 +180,7 @@ NETWORK_COMMON_UNIT_COLUMNS = (
     "mitigated_level",
     "remediation",
 )
+NETWORK_COMMON_UNIT_COLUMNS = NETWORK_CONFIDENTIALITY_COLUMNS
 NETWORK_BOUNDARY_COLUMNS = (
     "compliance_status",
     "product_compliance",
@@ -181,8 +193,8 @@ NETWORK_BOUNDARY_COLUMNS = (
 NETWORK_COLUMNS = (
     *NETWORK_OBJECT_COLUMNS,
     *NETWORK_AUTH_COLUMNS,
-    *NETWORK_COMMON_UNIT_COLUMNS,
-    *NETWORK_COMMON_UNIT_COLUMNS,
+    *NETWORK_INTEGRITY_COLUMNS,
+    *NETWORK_CONFIDENTIALITY_COLUMNS,
     *NETWORK_BOUNDARY_COLUMNS,
 )
 
