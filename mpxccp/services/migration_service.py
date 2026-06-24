@@ -127,6 +127,12 @@ class MigrationService:
                 "Ensure device detail tables can store requirement-specific extension fields.",
                 self._ensure_device_detail_extra_data_columns,
             ),
+            (
+                "network_detail_extra_data",
+                "1",
+                "Ensure network detail tables can store requirement-specific extension fields.",
+                self._ensure_network_detail_extra_data_columns,
+            ),
         )
         for name, version, description, migration in migrations:
             self._run_one(name, version, description, migration)
@@ -274,6 +280,17 @@ class MigrationService:
                 "device_access_integrity_details",
                 "device_log_integrity_details",
                 "device_executable_integrity_details",
+            ),
+        )
+
+    def _ensure_network_detail_extra_data_columns(self, session: Session) -> None:
+        self._ensure_extra_data_columns(
+            session,
+            (
+                "network_auth_details",
+                "network_integrity_details",
+                "network_confidentiality_details",
+                "network_boundary_integrity_details",
             ),
         )
 

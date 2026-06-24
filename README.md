@@ -4,7 +4,7 @@
 
 ## 当前状态
 
-当前仓库已完成需求、设计、实施计划、Task 1 工程初始化、Task 2 领域规则、Task 3 持久化基础、Task 4 项目生命周期服务、Task 5 共享服务、Task 6 桌面主窗口壳、Task 7 通用 UI 控件、Task 8 物理和环境安全模块和 Task 9 设备和计算安全模块。Task 9 已建立设备测评对象仓储、服务和页面，覆盖五类详情创建、保存、产品等级量化联动、量化/产品/风险回填、远程管理日期、证据上下文、删除范围和主窗口接入。
+当前仓库已完成需求、设计、实施计划、Task 1 工程初始化、Task 2 领域规则、Task 3 持久化基础、Task 4 项目生命周期服务、Task 5 共享服务、Task 6 桌面主窗口壳、Task 7 通用 UI 控件、Task 8 物理和环境安全模块、Task 9 设备和计算安全模块和 Task 10 网络和通信安全模块。Task 10 已建立网络子系统同步、通信信道仓储/服务/页面，覆盖四类网络测评单元详情创建、保存、量化/证据详情关联、前三类产品信道关联、边界单元无产品写入口、同步前保存、删除范围和主窗口接入。
 
 - `开发需求文档.md`：最高优先级需求基线，记录功能、数据结构、交互行为、评分公式、Excel 协议、证据文件协议、保存协议和兼容边界。
 - `开发设计方案.md`：开发设计方案，明确推荐技术栈、总体架构、数据模型、模块边界、测试与验收方案。
@@ -27,19 +27,21 @@
 - 共享业务服务：`mpxccp/services/quant_service.py`、`mpxccp/services/risk_service.py`、`mpxccp/services/product_service.py`、`mpxccp/services/evidence_service.py`、`mpxccp/services/knowledge_service.py`
 - 物理和环境安全：`mpxccp/repositories/physical_repo.py`、`mpxccp/services/physical_service.py`、`mpxccp/ui/pages/physical_page.py`
 - 设备和计算安全：`mpxccp/repositories/device_repo.py`、`mpxccp/services/device_service.py`、`mpxccp/ui/pages/device_page.py`
+- 网络和通信安全：`mpxccp/repositories/network_repo.py`、`mpxccp/services/network_service.py`、`mpxccp/ui/pages/network_page.py`
 - 证据适配器：`mpxccp/integration/evidence/file_store.py`、`mpxccp/integration/evidence/thumbnails.py`
 - UI 主窗口：`mpxccp/ui/main_window.py`
 - 通用 UI 控件：`mpxccp/ui/widgets/`
 - UI 资源：`mpxccp/resources/styles/app.qss`、`mpxccp/resources/icons/app.png`
 - 资源校验：`mpxccp/integration/packaging/resource_check.py`
 - 基础测试：`tests/unit/test_bootstrap.py`
-- UI 测试：`tests/ui/test_main_window.py`、`tests/ui/test_physical_page.py`、`tests/ui/test_device_page.py`、`tests/ui/test_quant_widget.py`、`tests/ui/test_autosave_manager.py`、`tests/ui/test_date_input.py`、`tests/ui/test_risk_widget.py`、`tests/ui/test_product_list_widget.py`、`tests/ui/test_evidence_dialog.py`、`tests/ui/test_widget_exports.py`
+- UI 测试：`tests/ui/test_main_window.py`、`tests/ui/test_physical_page.py`、`tests/ui/test_device_page.py`、`tests/ui/test_network_page.py`、`tests/ui/test_quant_widget.py`、`tests/ui/test_autosave_manager.py`、`tests/ui/test_date_input.py`、`tests/ui/test_risk_widget.py`、`tests/ui/test_product_list_widget.py`、`tests/ui/test_evidence_dialog.py`、`tests/ui/test_widget_exports.py`
 - 领域测试：`tests/unit/test_quant_rules.py`、`tests/unit/test_scoring_rules.py`、`tests/unit/test_association_rules.py`
 - 数据库测试：`tests/integration/test_database_schema.py`
 - 项目与基本信息测试：`tests/integration/test_project_lifecycle.py`、`tests/integration/test_basic_info_service.py`
 - 共享服务测试：`tests/integration/test_shared_services.py`、`tests/integration/test_evidence_service.py`
 - 物理模块测试：`tests/integration/test_physical_service.py`
 - 设备模块测试：`tests/integration/test_device_service.py`
+- 网络模块测试：`tests/integration/test_network_service.py`
 - 资源校验测试：`tests/integration/test_resource_check.py`
 - 工程配置：`pyproject.toml`
 
@@ -105,9 +107,10 @@ docs/superpowers/plans/2026-06-23-commercial-crypto-eval-tool-implementation.md
 7. 通用 UI 控件和自动保存管理器。已完成。
 8. 物理和环境安全模块。已完成。
 9. 设备和计算安全模块。已完成。
-10. 网络和应用两类技术域模块并行实现。下一步。
-11. 评分、Excel、问题清单和知识库。
-12. 数据治理、安装包和端到端验收。
+10. 网络和通信安全模块。已完成。
+11. 应用和数据安全模块。下一步。
+12. 评分、Excel、问题清单和知识库。
+13. 数据治理、安装包和端到端验收。
 
 ## 未来验证命令
 
@@ -124,6 +127,7 @@ uv pip install --python .venv\Scripts\python.exe -e ".[dev]"
 .venv\Scripts\python.exe -m pytest tests/ui/test_main_window.py tests/integration/test_resource_check.py tests/unit/test_bootstrap.py -q
 .venv\Scripts\python.exe -m pytest tests/integration/test_physical_service.py tests/ui/test_physical_page.py -q
 .venv\Scripts\python.exe -m pytest tests/integration/test_device_service.py tests/ui/test_device_page.py -q
+.venv\Scripts\python.exe -m pytest tests/integration/test_network_service.py tests/ui/test_network_page.py -q
 .venv\Scripts\python.exe -m pytest tests/ui/test_quant_widget.py tests/ui/test_autosave_manager.py tests/ui/test_date_input.py tests/ui/test_risk_widget.py tests/ui/test_product_list_widget.py tests/ui/test_evidence_dialog.py tests/ui/test_widget_exports.py -q
 ```
 

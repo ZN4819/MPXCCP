@@ -28,8 +28,9 @@ from PySide6.QtWidgets import (
 )
 
 from mpxccp.services.device_service import DeviceService
+from mpxccp.services.network_service import NetworkService
 from mpxccp.services.physical_service import PhysicalService
-from mpxccp.ui.pages import DevicePage, PhysicalPage
+from mpxccp.ui.pages import DevicePage, NetworkPage, PhysicalPage
 
 MAIN_WINDOW_TITLE = "商用密码应用安全性评估实施工具"
 
@@ -130,10 +131,12 @@ class MainWindow(QMainWindow):
         *,
         physical_service: PhysicalService | None = None,
         device_service: DeviceService | None = None,
+        network_service: NetworkService | None = None,
     ) -> None:
         super().__init__()
         self._physical_service = physical_service
         self._device_service = device_service
+        self._network_service = network_service
         self.current_project_id: int | None = None
         self.current_project_name = "未打开"
         self.current_flow_no = "--"
@@ -185,6 +188,7 @@ class MainWindow(QMainWindow):
         self.current_flow_no = flow_no.strip() or "--"
         self._physical_page.set_project_id(project_id)
         self._device_page.set_project_id(project_id)
+        self._network_page.set_project_id(project_id)
         self._refresh_status_bar()
 
     def physical_page(self) -> PhysicalPage:
@@ -192,6 +196,9 @@ class MainWindow(QMainWindow):
 
     def device_page(self) -> DevicePage:
         return self._device_page
+
+    def network_page(self) -> NetworkPage:
+        return self._network_page
 
     def set_effective_d_count(self, count: int | None) -> None:
         self.effective_d_count = max(count or 0, 0)
@@ -257,14 +264,8 @@ class MainWindow(QMainWindow):
         self._tabs.addTab(self._physical_page, TAB_NAMES[1])
         self._device_page = DevicePage(self._device_service, parent=self)
         self._tabs.addTab(self._device_page, TAB_NAMES[2])
-        self._tabs.addTab(
-            self._build_domain_page(
-                title="网络和通信安全",
-                objects=["边界链路", "通信信道", "远程接入", "子网区域"],
-                detail_labels=["网络对象", "传输保护", "完整性措施"],
-            ),
-            TAB_NAMES[3],
-        )
+        self._network_page = NetworkPage(self._network_service, parent=self)
+        self._tabs.addTab(self._network_page, TAB_NAMES[3])
         self._tabs.addTab(
             self._build_domain_page(
                 title="应用和数据安全",
