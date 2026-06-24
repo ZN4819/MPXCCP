@@ -27,8 +27,9 @@ from PySide6.QtWidgets import (
     QWidget,
 )
 
+from mpxccp.services.device_service import DeviceService
 from mpxccp.services.physical_service import PhysicalService
-from mpxccp.ui.pages import PhysicalPage
+from mpxccp.ui.pages import DevicePage, PhysicalPage
 
 MAIN_WINDOW_TITLE = "商用密码应用安全性评估实施工具"
 
@@ -124,9 +125,15 @@ ACTION_ICONS["删除"] = _TRASH_ICON
 class MainWindow(QMainWindow):
     """Desktop shell for the commercial cryptography assessment workflow."""
 
-    def __init__(self, *, physical_service: PhysicalService | None = None) -> None:
+    def __init__(
+        self,
+        *,
+        physical_service: PhysicalService | None = None,
+        device_service: DeviceService | None = None,
+    ) -> None:
         super().__init__()
         self._physical_service = physical_service
+        self._device_service = device_service
         self.current_project_id: int | None = None
         self.current_project_name = "未打开"
         self.current_flow_no = "--"
@@ -177,10 +184,14 @@ class MainWindow(QMainWindow):
         self.current_project_name = system_name.strip() or "未命名项目"
         self.current_flow_no = flow_no.strip() or "--"
         self._physical_page.set_project_id(project_id)
+        self._device_page.set_project_id(project_id)
         self._refresh_status_bar()
 
     def physical_page(self) -> PhysicalPage:
         return self._physical_page
+
+    def device_page(self) -> DevicePage:
+        return self._device_page
 
     def set_effective_d_count(self, count: int | None) -> None:
         self.effective_d_count = max(count or 0, 0)
@@ -244,14 +255,8 @@ class MainWindow(QMainWindow):
         self._tabs.addTab(self._build_basic_info_page(), TAB_NAMES[0])
         self._physical_page = PhysicalPage(self._physical_service, parent=self)
         self._tabs.addTab(self._physical_page, TAB_NAMES[1])
-        self._tabs.addTab(
-            self._build_domain_page(
-                title="设备和计算安全",
-                objects=["服务器", "终端设备", "密码设备", "运维管理"],
-                detail_labels=["设备名称", "身份鉴别", "安全配置"],
-            ),
-            TAB_NAMES[2],
-        )
+        self._device_page = DevicePage(self._device_service, parent=self)
+        self._tabs.addTab(self._device_page, TAB_NAMES[2])
         self._tabs.addTab(
             self._build_domain_page(
                 title="网络和通信安全",

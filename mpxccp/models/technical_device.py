@@ -60,6 +60,7 @@ class DeviceAuthDetail(
     )
     auth_methods: Mapped[str] = mapped_column(Text, default="", nullable=False)
     login_channel: Mapped[str] = mapped_column(String(255), default="", nullable=False)
+    extra_data: Mapped[dict | None] = mapped_column(JSON, nullable=True)
 
 
 class DeviceRemoteManagementDetail(
@@ -89,6 +90,7 @@ class DeviceRemoteManagementDetail(
     remote_protocol: Mapped[str] = mapped_column(String(128), default="", nullable=False)
     certificate_usage: Mapped[str] = mapped_column(Text, default="", nullable=False)
     channel_protection: Mapped[str] = mapped_column(Text, default="", nullable=False)
+    extra_data: Mapped[dict | None] = mapped_column(JSON, nullable=True)
 
 
 class DeviceAccessIntegrityDetail(
@@ -117,6 +119,7 @@ class DeviceAccessIntegrityDetail(
     )
     access_control_policy: Mapped[str] = mapped_column(Text, default="", nullable=False)
     integrity_method: Mapped[str] = mapped_column(Text, default="", nullable=False)
+    extra_data: Mapped[dict | None] = mapped_column(JSON, nullable=True)
 
 
 class DeviceLogIntegrityDetail(
@@ -145,6 +148,7 @@ class DeviceLogIntegrityDetail(
     )
     log_source: Mapped[str] = mapped_column(String(255), default="", nullable=False)
     integrity_method: Mapped[str] = mapped_column(Text, default="", nullable=False)
+    extra_data: Mapped[dict | None] = mapped_column(JSON, nullable=True)
 
 
 class DeviceExecutableIntegrityDetail(
@@ -173,3 +177,4 @@ class DeviceExecutableIntegrityDetail(
     )
     executable_scope: Mapped[str] = mapped_column(Text, default="", nullable=False)
     integrity_method: Mapped[str] = mapped_column(Text, default="", nullable=False)
+    extra_data: Mapped[dict | None] = mapped_column(JSON, nullable=True)
