@@ -3,7 +3,7 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from typing import Any
 
-from sqlalchemy import Engine
+from sqlalchemy import Engine, func, select
 
 import mpxccp.models as models
 from mpxccp.domain.constants import MANAGEMENT_FULL_SCORE, TECHNICAL_FULL_SCORE
@@ -128,6 +128,10 @@ class ScoringService:
                 self._indicator_record(indicator)
                 for indicator in self.scoring_repo.list_indicators(session)
             ]
+
+    def count_indicators(self) -> int:
+        with readonly_session_scope(self.engine) as session:
+            return session.scalar(select(func.count()).select_from(models.ScoringIndicator)) or 0
 
     def refresh_technical_domain(self, project_id: int, layer: str) -> ScoreSummaryRecord:
         with session_scope(self.engine) as session:
