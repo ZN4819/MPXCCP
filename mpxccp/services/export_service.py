@@ -9,7 +9,9 @@ from mpxccp.integration.excel.export_writer import (
     ExportWriter,
     normalize_module_names,
 )
+from mpxccp.integration.excel.issue_workbook import IssueWorkbook
 from mpxccp.integration.excel.score_workbook import ScoreWorkbook
+from mpxccp.services.knowledge_service import KnowledgeService
 from mpxccp.services.result import ServiceResult
 
 
@@ -20,10 +22,14 @@ class ExportService:
         *,
         export_writer: ExportWriter | None = None,
         score_workbook: ScoreWorkbook | None = None,
+        issue_workbook: IssueWorkbook | None = None,
+        knowledge_service: KnowledgeService | None = None,
     ) -> None:
         self.engine = engine
         self.export_writer = export_writer or ExportWriter(engine)
         self.score_workbook = score_workbook or ScoreWorkbook(engine)
+        self.issue_workbook = issue_workbook or IssueWorkbook(engine)
+        self.knowledge_service = knowledge_service or KnowledgeService(engine)
 
     def export_all_data(self, project_id: int) -> Workbook:
         return self._export_modules(project_id, list(ALL_DATA_SHEETS))
@@ -47,6 +53,19 @@ class ExportService:
         mode: str,
     ) -> ServiceResult:
         return self.score_workbook.import_management_scores(project_id, source, mode=mode)
+
+    def export_issue_workbook(self, project_id: int) -> Workbook:
+        return self.issue_workbook.export(project_id)
+
+    def export_knowledge_workbook(self) -> Workbook:
+        return self.knowledge_service.export_workbook()
+
+    def import_knowledge_workbook(
+        self,
+        source: str | Path | Workbook,
+        mode: str,
+    ) -> ServiceResult:
+        return self.knowledge_service.import_workbook(source, mode=mode)
 
     def _export_modules(self, project_id: int, sheet_names: list[str]) -> Workbook:
         workbook = Workbook()

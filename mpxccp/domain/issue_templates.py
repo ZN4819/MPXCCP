@@ -49,9 +49,17 @@ def append_first_level_product_note(products: Iterable[dict[str, str]]) -> str:
 
 
 def effective_issue_risk(fields: dict[str, str]) -> str:
-    if fields.get("risk_level") == "高风险" and fields.get("mitigation") == "具备":
-        return fields.get("mitigated_risk_level") or fields.get("risk_level", "")
+    mitigation = fields.get("mitigation") or fields.get("mitigation_available")
+    mitigated_level = fields.get("mitigated_risk_level") or fields.get("mitigated_level")
+    if fields.get("risk_level") == "高风险" and _has_mitigation(mitigation):
+        return mitigated_level or fields.get("risk_level", "")
     return fields.get("risk_level", "")
+
+
+def _has_mitigation(value: object) -> bool:
+    if isinstance(value, bool):
+        return value
+    return str(value).strip() in {"具备", "是", "有", "true", "True", "1"}
 
 
 ISSUE_TEMPLATES: dict[str, IssueTemplate] = {

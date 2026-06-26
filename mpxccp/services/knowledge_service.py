@@ -1,11 +1,21 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+from datetime import date, datetime
+from pathlib import Path
 from typing import Any
 
+from openpyxl import Workbook
 from sqlalchemy import Engine
 
 from mpxccp.domain.enums import KnowledgeModule
+from mpxccp.integration.excel.import_reader import ImportReader
+from mpxccp.integration.excel.schema import KNOWLEDGE_HEADERS, KNOWLEDGE_SHEET_NAME
+from mpxccp.integration.excel.workbook_styles import (
+    apply_header_row,
+    apply_table_style,
+    set_column_widths,
+)
 from mpxccp.models.knowledge import KnowledgeEntry
 from mpxccp.repositories.knowledge_repo import KnowledgeRepository
 from mpxccp.repositories.session import readonly_session_scope, session_scope
@@ -27,6 +37,8 @@ class KnowledgeRecord:
     risk_level: str
     tags: str
     sort_order: int
+    created_at: str = ""
+    updated_at: str = ""
 
 
 class KnowledgeService:
@@ -55,6 +67,13 @@ class KnowledgeService:
                     modules=modules,
                     text_filter=text_filter.strip(),
                 )
+            ]
+
+    def list_all_entries(self) -> list[KnowledgeRecord]:
+        with readonly_session_scope(self.engine) as session:
+            return [
+                self._record_payload(item)
+                for item in self.knowledge_repo.list_all_entries(session)
             ]
 
     def add_entry(self, type: str, module: str, content: str) -> ServiceResult:
@@ -168,6 +187,104 @@ class KnowledgeService:
                 payload={"deleted": deleted, "added": len(cleaned_entries)},
             )
 
+    def export_workbook(self) -> Workbook:
+        workbook = Workbook()
+        sheet = workbook.active
+        sheet.title = KNOWLEDGE_SHEET_NAME
+        sheet.append(list(KNOWLEDGE_HEADERS))
+        for entry in self.list_all_entries():
+            sheet.append(
+                [
+                    entry.id,
+                    entry.entry_type,
+                    entry.module,
+                    entry.content,
+                    entry.created_at,
+                    entry.updated_at,
+                ]
+            )
+        apply_table_style(sheet)
+        apply_header_row(sheet, 1)
+        set_column_widths(sheet, [10, 16, 16, 60, 20, 20])
+        return workbook
+
+    def import_workbook(
+        self,
+        source: str | Path | Workbook,
+        mode: str,
+    ) -> ServiceResult:
+        try:
+            workbook = ImportReader().load_workbook(source)
+            if KNOWLEDGE_SHEET_NAME not in workbook:
+                return ServiceResult(
+                    success=False,
+                    message=f"knowledge workbook missing sheet: {KNOWLEDGE_SHEET_NAME}",
+                    warnings=["knowledge_sheet_not_found"],
+                )
+            sheet = workbook[KNOWLEDGE_SHEET_NAME]
+            headers = [self._text(sheet.cell(row=1, column=col).value) for col in range(1, 7)]
+            if headers != list(KNOWLEDGE_HEADERS):
+                return ServiceResult(
+                    success=False,
+                    message="knowledge workbook headers do not match expected schema",
+                    warnings=["knowledge_headers_mismatch"],
+                )
+            entries = self._workbook_entries(sheet)
+            if mode == "替换":
+                return self.replace_import_entries(entries)
+            if mode == "追加":
+                return self.dedupe_append(entries)
+            return ServiceResult(
+                success=False,
+                message=f"unsupported knowledge import mode: {mode}",
+                warnings=["unsupported_import_mode"],
+            )
+        except Exception as exc:
+            return ServiceResult(
+                success=False,
+                message=f"knowledge workbook import failed: {exc}",
+                warnings=["knowledge_import_failed"],
+            )
+
+    def replace_import_entries(self, entries: list[dict[str, Any]]) -> ServiceResult:
+        cleaned_entries = self._clean_entries(entries)
+        skipped = len(entries) - len(cleaned_entries)
+        with session_scope(self.engine) as session:
+            deleted = self.knowledge_repo.delete_all(session)
+            for sort_order, values in enumerate(cleaned_entries):
+                self.knowledge_repo.add_entry(
+                    session,
+                    entry_type=values["entry_type"],
+                    module=values["module"],
+                    content=values["content"],
+                    sort_order=sort_order,
+                )
+            return ServiceResult(
+                success=True,
+                message="knowledge entries replaced",
+                payload={
+                    "deleted": deleted,
+                    "added": len(cleaned_entries),
+                    "skipped": skipped,
+                },
+            )
+
+    def _workbook_entries(self, sheet) -> list[dict[str, str]]:
+        reader = ImportReader()
+        entries: list[dict[str, str]] = []
+        for row_index in range(2, sheet.max_row + 1):
+            entry_type = self._text(reader.cell(sheet, row_index, 2))
+            module = self._text(reader.cell(sheet, row_index, 3))
+            content = self._text(reader.cell(sheet, row_index, 4))
+            entries.append(
+                {
+                    "entry_type": entry_type,
+                    "module": module,
+                    "content": content,
+                }
+            )
+        return entries
+
     def _clean_entries(self, entries: list[dict[str, Any]]) -> list[dict[str, str]]:
         cleaned_entries: list[dict[str, str]] = []
         for values in entries:
@@ -196,6 +313,15 @@ class KnowledgeService:
     def _text(self, value: Any) -> str:
         return "" if value is None else str(value).strip()
 
+    def _time_text(self, value: Any) -> str:
+        if value is None:
+            return ""
+        if isinstance(value, datetime):
+            return value.strftime("%Y-%m-%d %H:%M:%S")
+        if isinstance(value, date):
+            return value.isoformat()
+        return self._text(value)
+
     def _record_payload(self, entry: KnowledgeEntry) -> KnowledgeRecord:
         return KnowledgeRecord(
             id=entry.id,
@@ -206,4 +332,6 @@ class KnowledgeService:
             risk_level=entry.risk_level,
             tags=entry.tags,
             sort_order=entry.sort_order,
+            created_at=self._time_text(entry.created_at),
+            updated_at=self._time_text(entry.updated_at),
         )

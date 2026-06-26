@@ -1617,7 +1617,7 @@ git commit -m "feat: implement data and score workbook export"
 - Test: `tests/integration/test_issue_workbook.py`
 - Test: `tests/integration/test_knowledge_import_export.py`
 
-- [ ] **Step 1: 写问题描述清洗测试**
+- [x] **Step 1: 写问题描述清洗测试**
 
 ```python
 from mpxccp.domain.issue_templates import clean_other_prefix, join_multi_select
@@ -1628,7 +1628,7 @@ def test_issue_description_cleans_other_prefix_and_multi_select():
     assert join_multi_select("指纹,其他:门禁卡") == "指纹、门禁卡"
 ```
 
-- [ ] **Step 2: 实现问题模板工具函数**
+- [x] **Step 2: 实现问题模板工具函数**
 
 Functions:
 
@@ -1638,7 +1638,7 @@ Functions:
 - `append_first_level_product_note(products)`
 - `effective_issue_risk(detail_risk_fields)`
 
-- [ ] **Step 3: 写问题清单 workbook 测试**
+- [x] **Step 3: 写问题清单 workbook 测试**
 
 ```python
 def test_issue_workbook_has_fixed_title_and_headers(app_services, sample_project):
@@ -1651,7 +1651,7 @@ def test_issue_workbook_has_fixed_title_and_headers(app_services, sample_project
     ]
 ```
 
-- [ ] **Step 4: 实现 IssueWorkbook**
+- [x] **Step 4: 实现 IssueWorkbook**
 
 Must implement EXP-013 through EXP-017:
 
@@ -1662,7 +1662,7 @@ Must implement EXP-013 through EXP-017:
 - Technical domain handlers for physical, network, device, application.
 - No management domain issues.
 
-- [ ] **Step 5: 实现知识库导入导出**
+- [x] **Step 5: 实现知识库导入导出**
 
 `KnowledgeService` and `ExportService` must implement:
 
@@ -1670,7 +1670,7 @@ Must implement EXP-013 through EXP-017:
 - Replace import.
 - Append import with dedupe by type/module/content.
 
-- [ ] **Step 6: 运行验证**
+- [x] **Step 6: 运行验证**
 
 ```powershell
 python -m pytest tests/unit/test_issue_templates.py tests/integration/test_issue_workbook.py tests/integration/test_knowledge_import_export.py -q
@@ -1682,7 +1682,7 @@ Expected:
 all tests passed
 ```
 
-- [ ] **Step 7: 提交**
+- [x] **Step 7: 提交**
 
 ```powershell
 git add mpxccp/domain/issue_templates.py mpxccp/integration/excel/issue_workbook.py mpxccp/services/export_service.py mpxccp/services/knowledge_service.py tests/unit/test_issue_templates.py tests/integration/test_issue_workbook.py tests/integration/test_knowledge_import_export.py
