@@ -1701,7 +1701,7 @@ git commit -m "feat: implement issue list and knowledge workbook flows"
 - Test: `tests/integration/test_integrity_service.py`
 - Test: `tests/integration/test_migrations.py`
 
-- [ ] **Step 1: 写完整性检查测试**
+- [x] **Step 1: 写完整性检查测试**
 
 ```python
 def test_integrity_report_detects_orphan_quant_without_modifying_data(app_services, project, orphan_quant):
@@ -1710,7 +1710,7 @@ def test_integrity_report_detects_orphan_quant_without_modifying_data(app_servic
     assert app_services.quant.record_exists(orphan_quant.id)
 ```
 
-- [ ] **Step 2: 实现项目范围解析**
+- [x] **Step 2: 实现项目范围解析**
 
 `IntegrityService.resolve_project_scope(project_id)` returns:
 
@@ -1720,7 +1720,7 @@ def test_integrity_report_detects_orphan_quant_without_modifying_data(app_servic
 - Product references.
 - Compatible outer object references for products.
 
-- [ ] **Step 3: 实现只读完整性报告**
+- [x] **Step 3: 实现只读完整性报告**
 
 Detect:
 
@@ -1732,7 +1732,7 @@ Detect:
 
 No automatic mutation is allowed.
 
-- [ ] **Step 4: 写迁移幂等测试**
+- [x] **Step 4: 写迁移幂等测试**
 
 ```python
 def test_migrations_are_idempotent(app_services):
@@ -1741,7 +1741,7 @@ def test_migrations_are_idempotent(app_services):
     assert app_services.scoring.count_indicators() == 41
 ```
 
-- [ ] **Step 5: 固化迁移服务**
+- [x] **Step 5: 固化迁移服务**
 
 Ensure migrations:
 
@@ -1750,7 +1750,7 @@ Ensure migrations:
 - Preserve business data.
 - Log warnings instead of blocking old DB open when a noncritical cleanup fails.
 
-- [ ] **Step 6: 运行验证**
+- [x] **Step 6: 运行验证**
 
 ```powershell
 python -m pytest tests/integration/test_integrity_service.py tests/integration/test_migrations.py -q
@@ -1762,7 +1762,7 @@ Expected:
 all tests passed
 ```
 
-- [ ] **Step 7: 提交**
+- [x] **Step 7: 提交**
 
 ```powershell
 git add mpxccp/services/integrity_service.py mpxccp/services/migration_service.py tests/integration/test_integrity_service.py tests/integration/test_migrations.py

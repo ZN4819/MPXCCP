@@ -4,7 +4,7 @@
 
 ## 当前状态
 
-当前仓库已完成需求、设计、实施计划、Task 1 工程初始化、Task 2 领域规则、Task 3 持久化基础、Task 4 项目生命周期服务、Task 5 共享服务、Task 6 桌面主窗口壳、Task 7 通用 UI 控件、Task 8 物理和环境安全模块、Task 9 设备和计算安全模块、Task 10 网络和通信安全模块、Task 11 应用和数据安全模块、Task 12 评分引擎、评分页与有效 D 统计、Task 13 访谈模板 Excel 导入、Task 14 全量数据/所选模块/打分表导出导入服务和 Task 15 问题清单与知识库导入导出。Task 15 已建立问题清单工作簿适配器、EXP-017 主路径描述模板、风险缓释有效等级、连续合并规则、知识库 6 列导出、替换导入和追加去重导入服务入口。
+当前仓库已完成需求、设计、实施计划、Task 1 工程初始化、Task 2 领域规则、Task 3 持久化基础、Task 4 项目生命周期服务、Task 5 共享服务、Task 6 桌面主窗口壳、Task 7 通用 UI 控件、Task 8 物理和环境安全模块、Task 9 设备和计算安全模块、Task 10 网络和通信安全模块、Task 11 应用和数据安全模块、Task 12 评分引擎、评分页与有效 D 统计、Task 13 访谈模板 Excel 导入、Task 14 全量数据/所选模块/打分表导出导入服务、Task 15 问题清单与知识库导入导出和 Task 16 数据治理。Task 16 已建立只读项目范围解析、关联完整性报告、迁移幂等与失败继续诊断能力。
 
 - `开发需求文档.md`：最高优先级需求基线，记录功能、数据结构、交互行为、评分公式、Excel 协议、证据文件协议、保存协议和兼容边界。
 - `开发设计方案.md`：开发设计方案，明确推荐技术栈、总体架构、数据模型、模块边界、测试与验收方案。
@@ -21,6 +21,7 @@
 - ORM 模型：`mpxccp/models/`
 - 会话边界：`mpxccp/repositories/session.py`
 - 迁移服务：`mpxccp/services/migration_service.py`
+- 完整性诊断服务：`mpxccp/services/integrity_service.py`
 - 项目生命周期服务：`mpxccp/services/project_service.py`
 - 基本信息服务：`mpxccp/services/basic_info_service.py`
 - 共享 Repository：`mpxccp/repositories/shared_repo.py`、`mpxccp/repositories/knowledge_repo.py`
@@ -47,6 +48,7 @@
 - 网络模块测试：`tests/integration/test_network_service.py`
 - 评分模块测试：`tests/integration/test_scoring_service.py`、`tests/ui/test_scoring_page.py`
 - Excel 导入导出测试：`tests/integration/test_excel_import.py`、`tests/integration/test_excel_export.py`、`tests/integration/test_score_workbook.py`、`tests/integration/test_issue_workbook.py`、`tests/integration/test_knowledge_import_export.py`
+- 数据治理测试：`tests/integration/test_integrity_service.py`、`tests/integration/test_migrations.py`
 - 资源校验测试：`tests/integration/test_resource_check.py`
 - 工程配置：`pyproject.toml`
 
@@ -118,7 +120,9 @@ docs/superpowers/plans/2026-06-23-commercial-crypto-eval-tool-implementation.md
 13. 访谈模板 Excel 导入。已完成。
 14. 全量数据、所选模块和打分表导出导入。已完成服务层与工作簿协议。
 15. 问题清单和知识库。已完成服务层与工作簿协议。
-16. 数据治理、安装包和端到端验收。下一步。
+16. 数据治理、兼容迁移和关联完整性检查。已完成。
+17. 安装包、资源校验和运行支撑。下一步。
+18. 端到端验收、基线夹具和发布前回归。后续。
 
 ## 未来验证命令
 
@@ -141,6 +145,7 @@ uv pip install --python .venv\Scripts\python.exe -e ".[dev]"
 .venv\Scripts\python.exe -m pytest tests/integration/test_excel_import.py -q
 .venv\Scripts\python.exe -m pytest tests/integration/test_excel_export.py tests/integration/test_score_workbook.py -q
 .venv\Scripts\python.exe -m pytest tests/unit/test_issue_templates.py tests/integration/test_issue_workbook.py tests/integration/test_knowledge_import_export.py -q
+.venv\Scripts\python.exe -m pytest tests/integration/test_integrity_service.py tests/integration/test_migrations.py -q
 .venv\Scripts\python.exe -m pytest tests/ui/test_quant_widget.py tests/ui/test_autosave_manager.py tests/ui/test_date_input.py tests/ui/test_risk_widget.py tests/ui/test_product_list_widget.py tests/ui/test_evidence_dialog.py tests/ui/test_widget_exports.py -q
 ```
 

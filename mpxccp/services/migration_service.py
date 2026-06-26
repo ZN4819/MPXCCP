@@ -146,6 +146,9 @@ class MigrationService:
                 self._ensure_scoring_summary_detail_columns,
             ),
         )
+        self.run_migrations(migrations)
+
+    def run_migrations(self, migrations: tuple[tuple[str, str, str, MigrationFn], ...]) -> None:
         for name, version, description, migration in migrations:
             self._run_one(name, version, description, migration)
 
