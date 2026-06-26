@@ -26,6 +26,9 @@ APPLICATION_SECTIONS = ApplicationSections()
 MAX_WORKBOOK_SIZE_BYTES = 50 * 1024 * 1024
 PRODUCT_TEXT_PATTERN = "产品名称(厂商,证书:证书编号,等级:认证等级,用途:用途说明)"
 QUANT_COLUMNS = ("d", "a", "k", "ra", "rk")
+KNOWLEDGE_SHEET_NAME = "知识库"
+KNOWLEDGE_HEADERS = ("ID", "类型", "模块", "内容", "创建时间", "更新时间")
+KNOWLEDGE_COLUMNS = ("id", "entry_type", "module", "content", "created_at", "updated_at")
 
 PHYSICAL_OBJECT_COLUMNS = (
     "name",

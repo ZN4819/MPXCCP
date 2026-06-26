@@ -30,6 +30,20 @@ class KnowledgeRepository:
             session.scalars(statement.order_by(KnowledgeEntry.sort_order, KnowledgeEntry.id))
         )
 
+    def list_all_entries(self, session: Session) -> list[KnowledgeEntry]:
+        return list(
+            session.scalars(
+                select(KnowledgeEntry)
+                .where(KnowledgeEntry.is_enabled.is_(True))
+                .order_by(
+                    KnowledgeEntry.entry_type,
+                    KnowledgeEntry.module,
+                    KnowledgeEntry.sort_order,
+                    KnowledgeEntry.id,
+                )
+            )
+        )
+
     def find_duplicate(
         self,
         session: Session,

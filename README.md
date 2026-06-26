@@ -4,7 +4,7 @@
 
 ## 当前状态
 
-当前仓库已完成需求、设计、实施计划、Task 1 工程初始化、Task 2 领域规则、Task 3 持久化基础、Task 4 项目生命周期服务、Task 5 共享服务、Task 6 桌面主窗口壳、Task 7 通用 UI 控件、Task 8 物理和环境安全模块、Task 9 设备和计算安全模块、Task 10 网络和通信安全模块、Task 11 应用和数据安全模块、Task 12 评分引擎、评分页与有效 D 统计、Task 13 访谈模板 Excel 导入和 Task 14 全量数据、所选模块与打分表导出导入服务。Task 14 已建立 Excel 样式、评估数据导出写入器、打分表导出/管理域导入适配器和 `ExportService` 门面，覆盖五类数据 sheet、产品文本、D/A/K/Ra/Rk 顺序、打分表 9 个 sheet、整体测评合并、技术域不适用行、管理域替换/合并导入和失败回滚。
+当前仓库已完成需求、设计、实施计划、Task 1 工程初始化、Task 2 领域规则、Task 3 持久化基础、Task 4 项目生命周期服务、Task 5 共享服务、Task 6 桌面主窗口壳、Task 7 通用 UI 控件、Task 8 物理和环境安全模块、Task 9 设备和计算安全模块、Task 10 网络和通信安全模块、Task 11 应用和数据安全模块、Task 12 评分引擎、评分页与有效 D 统计、Task 13 访谈模板 Excel 导入、Task 14 全量数据/所选模块/打分表导出导入服务和 Task 15 问题清单与知识库导入导出。Task 15 已建立问题清单工作簿适配器、EXP-017 主路径描述模板、风险缓释有效等级、连续合并规则、知识库 6 列导出、替换导入和追加去重导入服务入口。
 
 - `开发需求文档.md`：最高优先级需求基线，记录功能、数据结构、交互行为、评分公式、Excel 协议、证据文件协议、保存协议和兼容边界。
 - `开发设计方案.md`：开发设计方案，明确推荐技术栈、总体架构、数据模型、模块边界、测试与验收方案。
@@ -30,7 +30,7 @@
 - 网络和通信安全：`mpxccp/repositories/network_repo.py`、`mpxccp/services/network_service.py`、`mpxccp/ui/pages/network_page.py`
 - 应用和数据安全：`mpxccp/repositories/application_repo.py`、`mpxccp/services/application_service.py`、`mpxccp/ui/pages/application_page.py`
 - 评分：`mpxccp/repositories/scoring_repo.py`、`mpxccp/services/scoring_service.py`、`mpxccp/ui/pages/scoring_page.py`
-- Excel 导入导出：`mpxccp/integration/excel/schema.py`、`mpxccp/integration/excel/import_reader.py`、`mpxccp/integration/excel/workbook_styles.py`、`mpxccp/integration/excel/export_writer.py`、`mpxccp/integration/excel/score_workbook.py`、`mpxccp/services/import_service.py`、`mpxccp/services/export_service.py`
+- Excel 导入导出：`mpxccp/integration/excel/schema.py`、`mpxccp/integration/excel/import_reader.py`、`mpxccp/integration/excel/workbook_styles.py`、`mpxccp/integration/excel/export_writer.py`、`mpxccp/integration/excel/score_workbook.py`、`mpxccp/integration/excel/issue_workbook.py`、`mpxccp/services/import_service.py`、`mpxccp/services/export_service.py`
 - 证据适配器：`mpxccp/integration/evidence/file_store.py`、`mpxccp/integration/evidence/thumbnails.py`
 - UI 主窗口：`mpxccp/ui/main_window.py`
 - 通用 UI 控件：`mpxccp/ui/widgets/`
@@ -38,7 +38,7 @@
 - 资源校验：`mpxccp/integration/packaging/resource_check.py`
 - 基础测试：`tests/unit/test_bootstrap.py`
 - UI 测试：`tests/ui/test_main_window.py`、`tests/ui/test_physical_page.py`、`tests/ui/test_device_page.py`、`tests/ui/test_network_page.py`、`tests/ui/test_quant_widget.py`、`tests/ui/test_autosave_manager.py`、`tests/ui/test_date_input.py`、`tests/ui/test_risk_widget.py`、`tests/ui/test_product_list_widget.py`、`tests/ui/test_evidence_dialog.py`、`tests/ui/test_widget_exports.py`
-- 领域测试：`tests/unit/test_quant_rules.py`、`tests/unit/test_scoring_rules.py`、`tests/unit/test_association_rules.py`
+- 领域测试：`tests/unit/test_quant_rules.py`、`tests/unit/test_scoring_rules.py`、`tests/unit/test_association_rules.py`、`tests/unit/test_issue_templates.py`
 - 数据库测试：`tests/integration/test_database_schema.py`
 - 项目与基本信息测试：`tests/integration/test_project_lifecycle.py`、`tests/integration/test_basic_info_service.py`
 - 共享服务测试：`tests/integration/test_shared_services.py`、`tests/integration/test_evidence_service.py`
@@ -46,7 +46,7 @@
 - 设备模块测试：`tests/integration/test_device_service.py`
 - 网络模块测试：`tests/integration/test_network_service.py`
 - 评分模块测试：`tests/integration/test_scoring_service.py`、`tests/ui/test_scoring_page.py`
-- Excel 导入导出测试：`tests/integration/test_excel_import.py`、`tests/integration/test_excel_export.py`、`tests/integration/test_score_workbook.py`
+- Excel 导入导出测试：`tests/integration/test_excel_import.py`、`tests/integration/test_excel_export.py`、`tests/integration/test_score_workbook.py`、`tests/integration/test_issue_workbook.py`、`tests/integration/test_knowledge_import_export.py`
 - 资源校验测试：`tests/integration/test_resource_check.py`
 - 工程配置：`pyproject.toml`
 
@@ -117,8 +117,8 @@ docs/superpowers/plans/2026-06-23-commercial-crypto-eval-tool-implementation.md
 12. 评分引擎、评分页和有效 D 统计。已完成。
 13. 访谈模板 Excel 导入。已完成。
 14. 全量数据、所选模块和打分表导出导入。已完成服务层与工作簿协议。
-15. 问题清单和知识库。下一步。
-16. 数据治理、安装包和端到端验收。
+15. 问题清单和知识库。已完成服务层与工作簿协议。
+16. 数据治理、安装包和端到端验收。下一步。
 
 ## 未来验证命令
 
@@ -140,6 +140,7 @@ uv pip install --python .venv\Scripts\python.exe -e ".[dev]"
 .venv\Scripts\python.exe -m pytest tests/integration/test_scoring_service.py tests/ui/test_scoring_page.py -q
 .venv\Scripts\python.exe -m pytest tests/integration/test_excel_import.py -q
 .venv\Scripts\python.exe -m pytest tests/integration/test_excel_export.py tests/integration/test_score_workbook.py -q
+.venv\Scripts\python.exe -m pytest tests/unit/test_issue_templates.py tests/integration/test_issue_workbook.py tests/integration/test_knowledge_import_export.py -q
 .venv\Scripts\python.exe -m pytest tests/ui/test_quant_widget.py tests/ui/test_autosave_manager.py tests/ui/test_date_input.py tests/ui/test_risk_widget.py tests/ui/test_product_list_widget.py tests/ui/test_evidence_dialog.py tests/ui/test_widget_exports.py -q
 ```
 
