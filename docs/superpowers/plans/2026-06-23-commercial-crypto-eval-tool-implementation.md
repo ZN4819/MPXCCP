@@ -1858,7 +1858,7 @@ git commit -m "chore: add Windows packaging and resource checks"
 - Create: `docs/验收清单.md`
 - Modify: `README.md`
 
-- [ ] **Step 1: 创建端到端样例数据**
+- [x] **Step 1: 创建端到端样例数据**
 
 `sample_data.py` must create:
 
@@ -1869,7 +1869,7 @@ git commit -m "chore: add Windows packaging and resource checks"
 - Quant values that produce at least one 符合、部分符合、不符合、不适用.
 - Management scores across all four management layers.
 
-- [ ] **Step 2: 写端到端测试**
+- [x] **Step 2: 写端到端测试**
 
 ```python
 def test_core_end_to_end_workflow(app_services, sample_data, tmp_path):
@@ -1886,7 +1886,7 @@ def test_core_end_to_end_workflow(app_services, sample_data, tmp_path):
     assert app_services.project.open_project(project_id).id == project_id
 ```
 
-- [ ] **Step 3: 写手工验收清单**
+- [x] **Step 3: 写手工验收清单**
 
 `docs/验收清单.md` must include the FR-161 flow:
 
@@ -1901,7 +1901,7 @@ def test_core_end_to_end_workflow(app_services, sample_data, tmp_path):
 9. 导出问题清单。
 10. 软删除项目并恢复。
 
-- [ ] **Step 4: 运行全量回归**
+- [x] **Step 4: 运行全量回归**
 
 ```powershell
 python -m pytest -q
@@ -1923,9 +1923,9 @@ Run the app:
 python -m mpxccp.main
 ```
 
-Record pass/fail notes in `docs/验收清单.md` under each checklist item.
+Record pass/fail notes in `docs/验收清单.md` under each checklist item. 当前自动化环境已记录自动化验收结果；真实桌面手工验收项在清单中标记为待执行。
 
-- [ ] **Step 6: 提交**
+- [x] **Step 6: 提交**
 
 ```powershell
 git add tests/integration/test_end_to_end_workflow.py tests/fixtures/sample_data.py docs/验收清单.md README.md
