@@ -1783,7 +1783,7 @@ git commit -m "feat: add data governance and integrity diagnostics"
 - Modify: `README.md`
 - Test: `tests/integration/test_runtime_paths.py`
 
-- [ ] **Step 1: 写运行路径测试**
+- [x] **Step 1: 写运行路径测试**
 
 ```python
 from mpxccp.config.paths import resolve_user_data_path
@@ -1796,7 +1796,7 @@ def test_user_data_path_is_not_install_directory(tmp_path, monkeypatch):
     assert path.name == "mpxccp.sqlite3"
 ```
 
-- [ ] **Step 2: 实现资源完整性检查脚本**
+- [x] **Step 2: 实现资源完整性检查脚本**
 
 `scripts/check_resources.ps1` must run the Python resource check and fail if required resources are missing:
 
@@ -1805,7 +1805,7 @@ python -m mpxccp.integration.packaging.resource_check
 if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 ```
 
-- [ ] **Step 3: 实现 Windows build script**
+- [x] **Step 3: 实现 Windows build script**
 
 `scripts/build_windows.ps1` must:
 
@@ -1814,7 +1814,7 @@ if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 - Call PyInstaller with app name.
 - Include resources and styles.
 
-- [ ] **Step 4: 更新 README**
+- [x] **Step 4: 更新 README**
 
 README must document:
 
@@ -1825,7 +1825,7 @@ README must document:
 - Local data path.
 - Evidence root behavior.
 
-- [ ] **Step 5: 运行验证**
+- [x] **Step 5: 运行验证**
 
 ```powershell
 python -m pytest tests/integration/test_runtime_paths.py -q
@@ -1839,10 +1839,10 @@ all tests passed
 resource check passed
 ```
 
-- [ ] **Step 6: 提交**
+- [x] **Step 6: 提交**
 
 ```powershell
-git add scripts mpxccp/resources README.md tests/integration/test_runtime_paths.py
+git add scripts/check_resources.ps1 scripts/build_windows.ps1 mpxccp/config/paths.py mpxccp/integration/packaging/resource_check.py mpxccp/resources/templates/.keep README.md docs/superpowers/plans/2026-06-23-commercial-crypto-eval-tool-implementation.md docs/阶段记录.md tests/integration/test_runtime_paths.py tests/integration/test_resource_check.py
 git commit -m "chore: add Windows packaging and resource checks"
 ```
 

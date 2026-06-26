@@ -30,11 +30,18 @@ def user_data_dir() -> Path:
     local_app_data = os.environ.get("LOCALAPPDATA")
     if local_app_data:
         return Path(local_app_data) / APP_NAME
+    roaming_app_data = os.environ.get("APPDATA")
+    if roaming_app_data:
+        return Path(roaming_app_data) / APP_NAME
     return Path.home() / ".local" / "share" / APP_NAME
 
 
+def resolve_user_data_path(filename: str) -> Path:
+    return user_data_dir() / filename
+
+
 def installed_data_path() -> Path:
-    return user_data_dir() / DATABASE_FILENAME
+    return resolve_user_data_path(DATABASE_FILENAME)
 
 
 def default_database_path() -> Path:

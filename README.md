@@ -4,7 +4,7 @@
 
 ## 当前状态
 
-当前仓库已完成需求、设计、实施计划、Task 1 工程初始化、Task 2 领域规则、Task 3 持久化基础、Task 4 项目生命周期服务、Task 5 共享服务、Task 6 桌面主窗口壳、Task 7 通用 UI 控件、Task 8 物理和环境安全模块、Task 9 设备和计算安全模块、Task 10 网络和通信安全模块、Task 11 应用和数据安全模块、Task 12 评分引擎、评分页与有效 D 统计、Task 13 访谈模板 Excel 导入、Task 14 全量数据/所选模块/打分表导出导入服务、Task 15 问题清单与知识库导入导出和 Task 16 数据治理。Task 16 已建立只读项目范围解析、关联完整性报告、迁移幂等与失败继续诊断能力。
+当前仓库已完成需求、设计、实施计划、Task 1 工程初始化、Task 2 领域规则、Task 3 持久化基础、Task 4 项目生命周期服务、Task 5 共享服务、Task 6 桌面主窗口壳、Task 7 通用 UI 控件、Task 8 物理和环境安全模块、Task 9 设备和计算安全模块、Task 10 网络和通信安全模块、Task 11 应用和数据安全模块、Task 12 评分引擎、评分页与有效 D 统计、Task 13 访谈模板 Excel 导入、Task 14 全量数据/所选模块/打分表导出导入服务、Task 15 问题清单与知识库导入导出、Task 16 数据治理和 Task 17 安装运行支撑。Task 17 已补齐 Windows 构建脚本、资源完整性检查、模板目录占位和用户数据目录解析。
 
 - `开发需求文档.md`：最高优先级需求基线，记录功能、数据结构、交互行为、评分公式、Excel 协议、证据文件协议、保存协议和兼容边界。
 - `开发设计方案.md`：开发设计方案，明确推荐技术栈、总体架构、数据模型、模块边界、测试与验收方案。
@@ -37,6 +37,7 @@
 - 通用 UI 控件：`mpxccp/ui/widgets/`
 - UI 资源：`mpxccp/resources/styles/app.qss`、`mpxccp/resources/icons/app.png`
 - 资源校验：`mpxccp/integration/packaging/resource_check.py`
+- Windows 脚本：`scripts/check_resources.ps1`、`scripts/build_windows.ps1`
 - 基础测试：`tests/unit/test_bootstrap.py`
 - UI 测试：`tests/ui/test_main_window.py`、`tests/ui/test_physical_page.py`、`tests/ui/test_device_page.py`、`tests/ui/test_network_page.py`、`tests/ui/test_quant_widget.py`、`tests/ui/test_autosave_manager.py`、`tests/ui/test_date_input.py`、`tests/ui/test_risk_widget.py`、`tests/ui/test_product_list_widget.py`、`tests/ui/test_evidence_dialog.py`、`tests/ui/test_widget_exports.py`
 - 领域测试：`tests/unit/test_quant_rules.py`、`tests/unit/test_scoring_rules.py`、`tests/unit/test_association_rules.py`、`tests/unit/test_issue_templates.py`
@@ -49,7 +50,7 @@
 - 评分模块测试：`tests/integration/test_scoring_service.py`、`tests/ui/test_scoring_page.py`
 - Excel 导入导出测试：`tests/integration/test_excel_import.py`、`tests/integration/test_excel_export.py`、`tests/integration/test_score_workbook.py`、`tests/integration/test_issue_workbook.py`、`tests/integration/test_knowledge_import_export.py`
 - 数据治理测试：`tests/integration/test_integrity_service.py`、`tests/integration/test_migrations.py`
-- 资源校验测试：`tests/integration/test_resource_check.py`
+- 资源校验和运行路径测试：`tests/integration/test_resource_check.py`、`tests/integration/test_runtime_paths.py`
 - 工程配置：`pyproject.toml`
 
 ## 推荐技术栈
@@ -121,8 +122,43 @@ docs/superpowers/plans/2026-06-23-commercial-crypto-eval-tool-implementation.md
 14. 全量数据、所选模块和打分表导出导入。已完成服务层与工作簿协议。
 15. 问题清单和知识库。已完成服务层与工作簿协议。
 16. 数据治理、兼容迁移和关联完整性检查。已完成。
-17. 安装包、资源校验和运行支撑。下一步。
-18. 端到端验收、基线夹具和发布前回归。后续。
+17. 安装包、资源校验和运行支撑。已完成。
+18. 端到端验收、基线夹具和发布前回归。下一步。
+
+## 本地运行与打包
+
+安装开发依赖：
+
+```powershell
+uv venv --python 3.11 .venv
+uv pip install --python .venv\Scripts\python.exe -e ".[dev]"
+```
+
+运行桌面应用：
+
+```powershell
+.venv\Scripts\python.exe -m mpxccp.main
+```
+
+运行测试、代码检查和资源检查：
+
+```powershell
+.venv\Scripts\python.exe -m pytest -q
+.venv\Scripts\python.exe -m ruff check .
+powershell -ExecutionPolicy Bypass -File scripts\check_resources.ps1
+```
+
+构建 Windows 可执行程序：
+
+```powershell
+powershell -ExecutionPolicy Bypass -File scripts\build_windows.ps1
+```
+
+运行路径说明：
+
+- 开发态默认数据库位于项目目录 `.local_data/mpxccp.sqlite3`。
+- 打包运行态数据库位于当前用户可写应用数据目录，优先使用 `%LOCALAPPDATA%\MPXCCP\mpxccp.sqlite3`，缺少 `%LOCALAPPDATA%` 时兼容 `%APPDATA%\MPXCCP\mpxccp.sqlite3`。
+- 证据根目录由数据库设置项 `evidence_root` 决定；默认相对值 `evidence` 会解析到当前数据目录下，不在证据记录中保存绝对路径。
 
 ## 未来验证命令
 
@@ -146,7 +182,9 @@ uv pip install --python .venv\Scripts\python.exe -e ".[dev]"
 .venv\Scripts\python.exe -m pytest tests/integration/test_excel_export.py tests/integration/test_score_workbook.py -q
 .venv\Scripts\python.exe -m pytest tests/unit/test_issue_templates.py tests/integration/test_issue_workbook.py tests/integration/test_knowledge_import_export.py -q
 .venv\Scripts\python.exe -m pytest tests/integration/test_integrity_service.py tests/integration/test_migrations.py -q
+.venv\Scripts\python.exe -m pytest tests/integration/test_runtime_paths.py tests/integration/test_resource_check.py -q
 .venv\Scripts\python.exe -m pytest tests/ui/test_quant_widget.py tests/ui/test_autosave_manager.py tests/ui/test_date_input.py tests/ui/test_risk_widget.py tests/ui/test_product_list_widget.py tests/ui/test_evidence_dialog.py tests/ui/test_widget_exports.py -q
+powershell -ExecutionPolicy Bypass -File scripts\check_resources.ps1
 ```
 
 完整工程逐步实现后，最终回归应至少包含：
